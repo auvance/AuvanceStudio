@@ -68,11 +68,11 @@ function Hero() {
           <span className="line-inner">We build sites</span>
         </span>
         <span className="line">
-          <span className="line-inner">that work as hard</span>
+          <span className="line-inner">that work as</span>
         </span>
         <span className="line">
           <span className="line-inner">
-            as you do<span className="accent">.</span>
+            hard as you do<span className="accent">.</span>
           </span>
         </span>
       </h1>
