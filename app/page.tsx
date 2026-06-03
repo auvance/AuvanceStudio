@@ -5,7 +5,7 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import {
   useReveal,
-  useLineReveal,
+  useParallax,
   useCountUp,
   useScrollHighlight,
   useTilt,
@@ -42,6 +42,7 @@ export default function Page() {
 function Hero() {
   return (
     <section id="top" className="hero">
+      <HeroImageTrail />
       <Plus className="hero-mark" style={{ top: "16vh", right: "4%" }} size={20} />
       <Plus className="hero-mark" style={{ bottom: "22vh", left: "3%" }} size={20} />
       <Plus className="hero-mark" style={{ bottom: "10vh", right: "6%" }} size={16} />
@@ -96,15 +97,101 @@ function Hero() {
           </div>
         </div>
       </div>
-
-      <div className="hero-strip" aria-hidden>
-        <div className="hs" style={{ backgroundImage: `url('${works[0].image}')` }} />
-        <div className="hs" style={{ backgroundImage: `url('${gradientPreview(1, "Design")}')` }} />
-        <div className="hs" style={{ backgroundImage: `url('${works[1].image}')` }} />
-        <div className="hs" style={{ backgroundImage: `url('${gradientPreview(3, "Strategy")}')` }} />
-      </div>
     </section>
   );
+}
+
+/* --- HERO IMAGE TRAIL (desktop only) --- */
+function HeroImageTrail() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const layer = ref.current;
+    const hero = layer?.closest(".hero") as HTMLElement | null;
+    if (!layer || !hero) return;
+    const ok = window.matchMedia(
+      "(hover: hover) and (pointer: fine) and (min-width: 1024px)"
+    ).matches;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!ok || reduce) return;
+
+    const pool = [
+      works[0].image,
+      works[1].image,
+      gradientPreview(0, "Web"),
+      gradientPreview(1, "Design"),
+      gradientPreview(2, "SEO"),
+      gradientPreview(3, "Brand"),
+    ];
+    let i = 0;
+    let lastT = 0;
+    let lastX = 0;
+    let lastY = 0;
+
+    const onMove = (e: MouseEvent) => {
+      // Don't spawn images over the CTAs / scroll cue.
+      const t = e.target as HTMLElement | null;
+      if (t && t.closest(".hero-foot, a, button")) return;
+      const now = performance.now();
+      const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+      // Less frequent than before (bigger time + distance gates).
+      if (now - lastT < 170 || dist < 120) return;
+      lastT = now;
+      lastX = e.clientX;
+      lastY = e.clientY;
+
+      const rect = hero.getBoundingClientRect();
+      const img = document.createElement("img");
+      img.src = pool[i % pool.length];
+      img.alt = "";
+      img.className = "hero-trail-img";
+      img.style.left = `${e.clientX - rect.left}px`;
+      img.style.top = `${e.clientY - rect.top}px`;
+      layer.appendChild(img);
+      i++;
+
+      gsap.fromTo(
+        img,
+        { autoAlpha: 0, scale: 0.6, rotate: Math.random() * 18 - 9 },
+        { autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" }
+      );
+      gsap.to(img, {
+        autoAlpha: 0,
+        scale: 0.92,
+        duration: 0.5,
+        delay: 0.45,
+        ease: "power2.in",
+        onComplete: () => img.remove(),
+      });
+    };
+
+    // Scroll-direction drift: down → the spray slides up/left, up → down/right.
+    const driftX = gsap.quickTo(layer, "x", { duration: 0.6, ease: "power2.out" });
+    const driftY = gsap.quickTo(layer, "y", { duration: 0.6, ease: "power2.out" });
+    let lastScroll = window.scrollY;
+    let resetT: number | undefined;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const down = y > lastScroll;
+      lastScroll = y;
+      driftX(down ? -55 : 55);
+      driftY(down ? -40 : 40);
+      window.clearTimeout(resetT);
+      resetT = window.setTimeout(() => {
+        driftX(0);
+        driftY(0);
+      }, 220);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    hero.addEventListener("mousemove", onMove);
+    return () => {
+      hero.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(resetT);
+      layer.querySelectorAll(".hero-trail-img").forEach((n) => n.remove());
+    };
+  }, []);
+  return <div ref={ref} className="hero-trail" aria-hidden />;
 }
 
 /* --- MARQUEE --- */
@@ -248,8 +335,9 @@ function StackCard({
   chip: string;
 }) {
   const inner = useTilt<HTMLDivElement>(6);
+  const reveal = useReveal<HTMLDivElement>({ y: 48 });
   return (
-    <div className="stack-card" style={{ top: `${12 + i * 2.2}vh` }}>
+    <div ref={reveal} className="stack-card" style={{ top: `${12 + i * 2.2}vh` }}>
       <div
         className="stack-card-rot"
         style={{ "--rot": i % 2 ? "-1.5deg" : "1.5deg" } as React.CSSProperties}
@@ -272,81 +360,122 @@ function StackCard({
   );
 }
 
-/* --- SERVICES (hover image reveal) --- id=services --- */
+/* --- SERVICES (centered · hover image + hover dropdown detail) --- id=services --- */
+type Service = { name: string; blurbs: string[]; images: string[] };
+
 function Services() {
-  const head = useReveal<HTMLHeadingElement>();
-  const services: [string, string, string][] = [
-    ["01", "Conversion-First Design", "Every page designed around the customer you want to reach — never a generic template."],
-    ["02", "Lead-Getting Forms", "Clear calls to action and forms that make it effortless to book, call, or enquire."],
-    ["03", "Standout Local Presence", "Built to look more credible than your competitors, so customers choose you first."],
-    ["04", "Fast, Owned & Yours", "Lightning-fast, SEO-ready, and 100% yours after launch — code, hosting, domain."],
+  const services: Service[] = [
+    {
+      name: "Conversion-First Design",
+      blurbs: [
+        "We design every page around the customer you want to reach — never a generic template.",
+        "Clear hierarchy, fast loads, and one obvious next step on every screen.",
+      ],
+      images: [works[0].image, gradientPreview(0, "Design")],
+    },
+    {
+      name: "Web Development",
+      blurbs: [
+        "Hand-built, lightning-fast sites — no bloated page builders.",
+        "SEO-ready markup and clean code you actually own after launch.",
+      ],
+      images: [gradientPreview(1, "Build"), works[1].image],
+    },
+    {
+      name: "Landing Pages",
+      blurbs: [
+        "Focused, single-goal pages that turn a campaign click into a booking.",
+        "Wired with the forms and tracking that tell you what's working.",
+      ],
+      images: [gradientPreview(2, "Launch"), gradientPreview(0, "Page")],
+    },
+    {
+      name: "Local SEO",
+      blurbs: [
+        "Get found by the people already searching for you nearby.",
+        "Maps, metadata, and speed — the things that move local rankings.",
+      ],
+      images: [works[0].image, gradientPreview(3, "Rank")],
+    },
+    {
+      name: "Brand & Identity",
+      blurbs: [
+        "A look that makes a small business read as the obvious, credible choice.",
+        "Logo, type, and colour that stay consistent everywhere.",
+      ],
+      images: [gradientPreview(3, "Brand"), works[1].image],
+    },
   ];
+
   return (
-    <section id="services" className="section" style={{ background: "var(--surface)" }}>
-      <div className="spine-label">02 — What We Do</div>
-      <h2 ref={head} className="h2" style={{ maxWidth: "820px", marginBottom: "3rem" }}>
-        Every decision made around one goal — results.
-      </h2>
-      <ServiceList services={services} />
+    <section id="services" className="section svc2" style={{ background: "var(--surface)" }}>
+      <div className="spine-label" style={{ justifyContent: "center" }}>
+        02 — What We Do
+      </div>
+      <div className="svc2-list">
+        {services.map((s, i) => (
+          <Svc2Item key={s.name} i={i} s={s} />
+        ))}
+      </div>
     </section>
   );
 }
 
-function ServiceList({ services }: { services: [string, string, string][] }) {
-  const imgRef = useRef<HTMLImageElement>(null);
-
+function Svc2Item({ i, s }: { i: number; s: Service }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const img = imgRef.current;
-    if (!img) return;
-    if (!window.matchMedia("(pointer: fine)").matches) return;
-    gsap.set(img, { autoAlpha: 0, scale: 0.92 });
-    const xTo = gsap.quickTo(img, "x", { duration: 0.5, ease: "power3" });
-    const yTo = gsap.quickTo(img, "y", { duration: 0.5, ease: "power3" });
-    const move = (e: MouseEvent) => {
-      xTo(e.clientX - img.offsetWidth / 2);
-      yTo(e.clientY - img.offsetHeight / 2);
-    };
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
-  }, []);
-
-  const enter = (src: string) => {
-    const img = imgRef.current;
-    if (!img) return;
-    img.src = src;
-    gsap.to(img, { autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" });
-  };
-  const leave = () => {
-    if (imgRef.current) gsap.to(imgRef.current, { autoAlpha: 0, scale: 0.92, duration: 0.4, ease: "power3.out" });
-  };
-
+    const el = ref.current;
+    if (!el) return;
+    gsap.to(el, { height: open ? "auto" : 0, duration: 0.55, ease: "power3.inOut" });
+  }, [open]);
+  const id = `svc-${i}`;
   return (
-    <div className="svc-list" onMouseLeave={leave}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img ref={imgRef} className="svc-preview" alt="" />
-      {services.map((s, i) => (
-        <div key={s[0]} className="svc-row" data-hover onMouseEnter={() => enter(gradientPreview(i, s[1]))}>
-          <span className="svc-row-title">
-            <span className="svc-row-no">{s[0]}</span>
-            {s[1]}
-          </span>
-          <span className="body-lg" style={{ maxWidth: "360px", textAlign: "right" }}>
-            {s[2]}
-          </span>
+    <div
+      className="svc2-item"
+      data-open={open}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        className="svc2-name-row"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((o) => !o)}
+        data-hover
+      >
+        <span className="svc2-no">0{i + 1}</span>
+        <span className="svc2-name">{s.name}</span>
+      </button>
+      <div className="svc2-detail" id={id} ref={ref}>
+        <div className="svc2-detail-inner">
+          <div className="svc2-copy">
+            {s.blurbs.map((b, j) => (
+              <p key={j}>{b}</p>
+            ))}
+          </div>
+          <div className="svc2-media">
+            {s.images.map((im, j) => (
+              <div key={j} className="svc2-img" style={{ backgroundImage: `url('${im}')` }} aria-hidden />
+            ))}
+          </div>
         </div>
-      ))}
+      </div>
     </div>
   );
 }
 
-/* --- PROCESS --- id=process --- */
+/* --- PROCESS (staggered parallax cards) --- id=process --- */
 function Process() {
-  const steps: [string, string, string][] = [
-    ["01", "Discovery", "We meet — at your place or on a call. A real conversation about your business and your customers. Free, no pitch."],
-    ["02", "Design", "You see and approve every stage before a single line of code. We lock the scope so there are no surprises."],
-    ["03", "Build", "We handle the domain, hosting, and launch. You get a walkthrough so you know exactly how to manage it."],
-    ["04", "Yours", "Live, owned, and supported. You own the site outright — and we're one text away whenever you need us."],
+  const steps: [string, string][] = [
+    ["Discovery", "We meet — at your place or on a call. A real conversation about your business. Free, no pitch."],
+    ["Design", "You see and approve every stage before a single line of code. We lock the scope — no surprises."],
+    ["Build", "We handle the domain, hosting, and launch, with a walkthrough so you know how to manage it."],
+    ["Yours", "Live, owned, and supported. You own the site outright — and we're one text away."],
   ];
+  const speeds = [-0.12, 0.07, -0.05, 0.11];
+  const offsets = ["0vh", "6vh", "2.5vh", "8vh"];
   return (
     <section id="process" className="section">
       <EditorialHead left="/ The Process" right="Four steps — 03">
@@ -355,32 +484,44 @@ function Process() {
           You see and approve every stage before a single line of code — then it&apos;s live, owned, and supported.
         </span>
       </EditorialHead>
-      <div>
-        {steps.map(([num, title, desc]) => (
-          <Row key={num} num={num} title={title} desc={desc} />
+      <div className="proc-cards">
+        {steps.map((s, i) => (
+          <ProcCard key={s[0]} i={i} title={s[0]} desc={s[1]} speed={speeds[i]} offset={offsets[i]} />
         ))}
       </div>
     </section>
   );
 }
 
-function Row({ num, title, desc }: { num: string; title: string; desc: string }) {
-  const ref = useReveal<HTMLDivElement>({ y: 24 });
+function ProcCard({
+  i,
+  title,
+  desc,
+  speed,
+  offset,
+}: {
+  i: number;
+  title: string;
+  desc: string;
+  speed: number;
+  offset: string;
+}) {
+  const ref = useParallax<HTMLDivElement>(speed);
   return (
-    <div ref={ref} className="row">
-      <span className="row-num">{num}</span>
-      <span className="row-title">
-        {title}
-        <span className="row-arrow">
-          <ArrowUpRight size={20} />
+    <div className="proc-card" style={{ marginTop: offset }}>
+      <div ref={ref} className="proc-card-inner">
+        <span className="num">0{i + 1}</span>
+        <h3>{title}</h3>
+        <span className="proc-aster">
+          <Asterisk size={30} />
         </span>
-      </span>
-      <span className="row-desc body-lg">{desc}</span>
+        <p>{desc}</p>
+      </div>
     </div>
   );
 }
 
-/* --- WORK RAIL (horizontal) --- id=work --- */
+/* --- WORK RAIL (horizontal scroll) --- id=work --- */
 function WorkRail() {
   const rail = useHorizontalScroll<HTMLElement>();
   return (
@@ -415,15 +556,44 @@ function WorkRail() {
 function WorkSlide({ w, i, total }: { w: (typeof works)[number]; i: number; total: number }) {
   const go = useStinger();
   const href = `/work/${w.slug}`;
+  const cardRef = useRef<HTMLAnchorElement>(null);
+  const stickerRef = useRef<HTMLSpanElement>(null);
+
+  // "View project" sticker that pops in and follows the cursor (desktop only).
+  useEffect(() => {
+    const card = cardRef.current;
+    const sticker = stickerRef.current;
+    if (!card || !sticker) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    gsap.set(sticker, { xPercent: -50, yPercent: -50, scale: 0.5, rotation: -5, autoAlpha: 0 });
+    const xTo = gsap.quickTo(sticker, "x", { duration: 0.3, ease: "power3" });
+    const yTo = gsap.quickTo(sticker, "y", { duration: 0.3, ease: "power3" });
+    const move = (e: MouseEvent) => {
+      const r = card.getBoundingClientRect();
+      xTo(e.clientX - r.left);
+      yTo(e.clientY - r.top);
+    };
+    const enter = () => gsap.to(sticker, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" });
+    const leave = () => gsap.to(sticker, { autoAlpha: 0, scale: 0.5, duration: 0.25, ease: "power2.in" });
+    card.addEventListener("mousemove", move);
+    card.addEventListener("mouseenter", enter);
+    card.addEventListener("mouseleave", leave);
+    return () => {
+      card.removeEventListener("mousemove", move);
+      card.removeEventListener("mouseenter", enter);
+      card.removeEventListener("mouseleave", leave);
+    };
+  }, []);
+
   return (
     <Link
+      ref={cardRef}
       href={href}
       onClick={(e) => {
         e.preventDefault();
         go(href);
       }}
       className="work-slide"
-      data-cursor="View ↗"
       data-hover
     >
       <div className="ws-media">
@@ -445,6 +615,9 @@ function WorkSlide({ w, i, total }: { w: (typeof works)[number]; i: number; tota
           {w.services.join(" · ")} — {w.year}
         </div>
       </div>
+      <span ref={stickerRef} className="work-sticker" aria-hidden>
+        View project <ArrowUpRight size={13} />
+      </span>
     </Link>
   );
 }
@@ -531,28 +704,64 @@ function FaqItem({ no, q, a }: { no: string; q: string; a: string }) {
 
 /* --- CONTACT --- id=contact --- */
 function Contact() {
-  const head = useLineReveal<HTMLHeadingElement>();
+  const sectionRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      gsap.set(section.querySelector(".contact-head"), { scale: 1, autoAlpha: 1, filter: "none" });
+      gsap.set(section.querySelectorAll(".cw"), { yPercent: 0 });
+      gsap.set(section.querySelector(".contact-forms"), { autoAlpha: 1, y: 0 });
+      return;
+    }
+    const ctx = gsap.context(() => {
+      // Scrubbed to scroll → the heading zooms in from "another dimension",
+      // the lines rise in order (Ready → …), then the two forms arrive.
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: section, start: "top bottom", end: "top 16%", scrub: 0.8 },
+      });
+      tl.fromTo(
+        ".contact-head",
+        { scale: 0.32, autoAlpha: 0, filter: "blur(16px)" },
+        { scale: 1, autoAlpha: 1, filter: "blur(0px)", ease: "power2.out" }
+      )
+        .fromTo(
+          ".contact-head .cw",
+          { yPercent: 115 },
+          { yPercent: 0, stagger: 0.18, ease: "power3.out" },
+          0.08
+        )
+        .fromTo(
+          ".contact-forms",
+          { autoAlpha: 0, y: 90 },
+          { autoAlpha: 1, y: 0, ease: "power2.out" },
+          0.55
+        );
+    }, section);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="contact" className="section contact">
-      <div className="ghost-text" style={{ bottom: 0, left: "50%", transform: "translateX(-50%)" }}>
-        HELLO
-      </div>
-      <div className="spine-label" style={{ justifyContent: "center" }}>
-        06 — Let&apos;s Work Together
-      </div>
-      <h2 ref={head} className="h1" style={{ maxWidth: "1000px", margin: "0 auto 1.5rem" }}>
-        <span className="line">
-          <span className="line-inner">Ready to build</span>
-        </span>
-        <span className="line">
-          <span className="line-inner">
-            something that works<span className="accent">?</span>
+    <section id="contact" ref={sectionRef} className="section contact">
+      <div className="contact-zoom">
+        <div className="spine-label" style={{ justifyContent: "center" }}>
+          06 — Let&apos;s Work Together
+        </div>
+        <h2 className="contact-head">
+          <span className="cw-line">
+            <span className="cw">Ready</span>
           </span>
-        </span>
-      </h2>
-      <p className="body-lg" style={{ maxWidth: "560px", margin: "0 auto" }}>
-        Pick your path — book a quick call, or get a tailored quote. No pressure either way.
-      </p>
+          <span className="cw-line">
+            <span className="cw">to build something</span>
+          </span>
+          <span className="cw-line">
+            <span className="cw">
+              that works<span className="accent">?</span>
+            </span>
+          </span>
+        </h2>
+      </div>
       <div className="contact-forms">
         <BookCallForm />
         <QuoteForm />

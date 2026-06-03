@@ -100,7 +100,7 @@ export default function CaseStudy({ work }: { work: Work }) {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section curtain-end">
         <div className="cs-next">
           <div>
             <div className="label" style={{ marginBottom: "0.75rem" }}>

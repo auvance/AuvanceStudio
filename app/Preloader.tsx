@@ -3,22 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { GRAIN_DATA_URI } from "./svg";
 
 /**
- * Full-screen intro. Counts 0→100, then lifts away to reveal the hero,
- * whose headline lines and meta animate in as the curtain rises.
- *
- * Uses the standard gsap.context + revert pattern so it behaves correctly
- * under React StrictMode (the throwaway first mount is reverted; the real
- * mount recreates and plays). A safety timeout guarantees the page is never
- * left locked behind the overlay if anything goes wrong.
+ * Intro preloader.
+ * - Crown on the LEFT (fades in, 3D swivels, then a quick sparkle).
+ * - A huge Monument-Extended odometer counter on the RIGHT (000 → 100),
+ *   each digit column rolling at its own speed with an expo in/out feel.
+ * - A progress bar along the bottom, over a faint noise field.
  */
 export default function Preloader() {
   const [done, setDone] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const crownRef = useRef<HTMLDivElement>(null);
-  const countRef = useRef<HTMLDivElement>(null);
+  const sparkleRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
+  const uColRef = useRef<HTMLDivElement>(null);
+  const uStripRef = useRef<HTMLDivElement>(null);
+  const tStripRef = useRef<HTMLDivElement>(null);
+  const hStripRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -33,18 +36,15 @@ export default function Preloader() {
       setDone(true);
     };
 
-    // Lock scroll for the duration of the intro. Lenis may not be created yet
-    // (its effect runs after ours), so retry the stop on the next tick.
     document.documentElement.style.overflow = "hidden";
     const stopId = window.setTimeout(() => window.__lenis?.stop(), 0);
 
     const revealInstant = () => {
       gsap.set(".hero-headline .line-inner", { yPercent: 0 });
-      gsap.set([".hero-eyebrow", ".hero-foot", ".hero-strip"], { autoAlpha: 1, y: 0 });
+      gsap.set([".hero-eyebrow", ".hero-foot"], { autoAlpha: 1, y: 0 });
     };
 
-    // Bulletproof: never leave the page locked behind the curtain.
-    const safetyId = window.setTimeout(finish, reduce ? 400 : 6000);
+    const safetyId = window.setTimeout(finish, reduce ? 400 : 7000);
 
     const ctx = gsap.context(() => {
       if (reduce) {
@@ -53,36 +53,60 @@ export default function Preloader() {
         return;
       }
 
+      gsap.set(crownRef.current, { transformPerspective: 700 });
+      gsap.set(sparkleRef.current, { autoAlpha: 0, scale: 0 });
+      const colH = uColRef.current ? uColRef.current.clientHeight : 0;
+      const setU = gsap.quickSetter(uStripRef.current as Element, "y", "px");
+      const setT = gsap.quickSetter(tStripRef.current as Element, "y", "px");
+      const setH = gsap.quickSetter(hStripRef.current as Element, "y", "px");
+
       const counter = { v: 0 };
       const tl = gsap.timeline({ onComplete: finish });
 
-      tl
-        // Pre-hide hero (under the overlay → no flash)
-        .set(".hero-headline .line-inner", { yPercent: 110 }, 0)
-        .set([".hero-eyebrow", ".hero-foot", ".hero-strip"], { autoAlpha: 0, y: 28 }, 0)
-        // Intro
-        .fromTo(
-          crownRef.current,
-          { autoAlpha: 0, scale: 0.82, y: 12 },
-          { autoAlpha: 1, scale: 1, y: 0, duration: 0.9, ease: "power3.out" },
-          0.1
-        )
-        .to(
-          counter,
-          {
-            v: 100,
-            duration: 1.35,
-            ease: "power2.inOut",
-            onUpdate: () => {
-              if (countRef.current)
-                countRef.current.textContent = String(Math.round(counter.v)).padStart(3, "0");
-            },
+      // pre-hide hero (under the curtain → no flash)
+      tl.set(".hero-headline .line-inner", { yPercent: 110 }, 0);
+      tl.set([".hero-eyebrow", ".hero-foot"], { autoAlpha: 0, y: 28 }, 0);
+
+      // crown — fade/scale in, then a slow 3D swivel
+      tl.fromTo(
+        crownRef.current,
+        { autoAlpha: 0, scale: 0.8, rotationY: -90 },
+        { autoAlpha: 1, scale: 1, rotationY: 0, duration: 0.9, ease: "power3.out" },
+        0.1
+      );
+      tl.to(crownRef.current, { rotationY: 360, duration: 1.6, ease: "power1.inOut" }, 1.0);
+
+      // counter odometer — expo in/out
+      tl.to(
+        counter,
+        {
+          v: 100,
+          duration: 2.2,
+          ease: "expo.inOut",
+          onUpdate: () => {
+            const v = counter.v;
+            setU(-v * colH);
+            setT(-(v / 10) * colH);
+            setH(-(v / 100) * colH);
           },
-          0
-        )
-        .fromTo(barRef.current, { scaleX: 0 }, { scaleX: 1, duration: 1.35, ease: "power2.inOut" }, 0)
-        // Outro — curtain up + hero reveal
-        .to(crownRef.current, { autoAlpha: 0, y: -24, duration: 0.5, ease: "power2.in" }, "+=0.15")
+        },
+        0
+      );
+
+      // progress bar — expo in/out
+      tl.fromTo(barRef.current, { scaleX: 0 }, { scaleX: 1, duration: 2.2, ease: "expo.inOut" }, 0);
+
+      // quick sparkle on the crown when the count lands
+      tl.fromTo(
+        sparkleRef.current,
+        { autoAlpha: 1, scale: 0, rotate: -50 },
+        { scale: 1.35, rotate: 50, duration: 0.28, ease: "power2.out" },
+        2.25
+      ).to(sparkleRef.current, { autoAlpha: 0, scale: 0.4, duration: 0.3, ease: "power2.in" }, ">-0.02");
+
+      // outro — lift the curtain, reveal the hero
+      tl.to(crownRef.current, { autoAlpha: 0, y: -24, duration: 0.5, ease: "power2.in" }, 2.85)
+        .to(".preloader-counter", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power2.in" }, "<")
         .to(overlayRef.current, { yPercent: -100, duration: 1.05, ease: "expo.inOut" }, "<0.05")
         .to(
           ".hero-headline .line-inner",
@@ -90,7 +114,7 @@ export default function Preloader() {
           "<0.32"
         )
         .to(
-          [".hero-eyebrow", ".hero-foot", ".hero-strip"],
+          [".hero-eyebrow", ".hero-foot"],
           { autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.12 },
           "<0.15"
         );
@@ -107,13 +131,50 @@ export default function Preloader() {
 
   return (
     <div className="preloader" ref={overlayRef}>
+      <div
+        className="preloader-noise"
+        aria-hidden
+        style={{ backgroundImage: `url("${GRAIN_DATA_URI}")` }}
+      />
+
       <div className="preloader-crown" ref={crownRef}>
         <img className="crown-white" src="/crown-white.svg" alt="" />
         <img className="crown-black" src="/crown-black.svg" alt="" />
       </div>
-      <div className="preloader-count" ref={countRef}>
-        000
+      <div className="preloader-sparkle" ref={sparkleRef} aria-hidden>
+        ✦
       </div>
+
+      <div className="preloader-counter">
+        <div className="pl-col">
+          <div className="pl-strip" ref={hStripRef}>
+            {[0, 1].map((k) => (
+              <span className="pl-cell" key={k}>
+                {k}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="pl-col">
+          <div className="pl-strip" ref={tStripRef}>
+            {Array.from({ length: 11 }, (_, j) => (
+              <span className="pl-cell" key={j}>
+                {j % 10}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="pl-col" ref={uColRef}>
+          <div className="pl-strip" ref={uStripRef}>
+            {Array.from({ length: 101 }, (_, i) => (
+              <span className="pl-cell" key={i}>
+                {i % 10}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="preloader-bar" ref={barRef} />
     </div>
   );

@@ -29,9 +29,23 @@ export default function Nav() {
   const scrolled = useScrolled(60);
   const cta = useMagnetic<HTMLAnchorElement>(0.3);
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const count = String(works.length).padStart(2, "0");
   const pathname = usePathname();
   const contactHref = pathname === "/" ? "#contact" : "/#contact";
+
+  // Hide on scroll-down (e.g. heading into the footer), show on scroll-up.
+  useEffect(() => {
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const goingDown = y > lastY;
+      lastY = y;
+      setHidden(goingDown && y > 220 && !open);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
 
   // Lock scroll while the mobile menu is open
   useEffect(() => {
@@ -44,7 +58,7 @@ export default function Nav() {
 
   return (
     <>
-      <nav className={`nav${scrolled ? " scrolled" : ""}`}>
+      <nav className={`nav${scrolled ? " scrolled" : ""}${hidden ? " nav--hidden" : ""}`}>
         <div className="nav-left">
           <CrownToggle />
           <Link href="/" className="wordmark" data-hover>

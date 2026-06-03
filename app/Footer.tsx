@@ -1,47 +1,99 @@
-import { ArrowUpRight } from "./svg";
+"use client";
+
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { gsap } from "gsap";
+import { works } from "./works";
+
+const TITLE = "Auvance.";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const titleRef = useRef<HTMLHeadingElement>(null);
+
+  // Split-text reveal — the title characters rise in as the footer is uncovered.
+  useEffect(() => {
+    const title = titleRef.current;
+    if (!title) return;
+    const chars = title.querySelectorAll<HTMLElement>(".ft-char");
+    if (!chars.length) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(chars, { yPercent: 0 });
+      return;
+    }
+    // Trigger off the in-flow spacer (the reveal zone) on desktop, else the title.
+    const spacer = document.querySelector<HTMLElement>(".footer-spacer");
+    const trigger = spacer && spacer.offsetHeight > 0 ? spacer : title;
+    const ctx = gsap.context(() => {
+      gsap.from(chars, {
+        yPercent: 120,
+        stagger: 0.045,
+        duration: 0.85,
+        ease: "power4.out",
+        scrollTrigger: { trigger, start: "top 78%" },
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
   return (
     <footer className="footer">
-      <div className="footer-crown" aria-hidden>
-        <img className="crown-white" src="/crown-white.svg" alt="" style={{ width: "100%" }} />
-        <img className="crown-black" src="/crown-black.svg" alt="" style={{ width: "100%" }} />
+      <div className="footer-head">
+        <div className="footer-mark" aria-hidden>
+          <img className="crown-white" src="/crown-white.svg" alt="" />
+          <img className="crown-black" src="/crown-black.svg" alt="" />
+        </div>
+        <div>
+          <h2 className="footer-title" ref={titleRef} aria-label={TITLE}>
+            {TITLE.split("").map((ch, i) => (
+              <span className="ft-char" key={i} aria-hidden>
+                {ch}
+              </span>
+            ))}
+          </h2>
+          <p className="footer-sub">
+            Thanks for exploring. Now let&apos;s build something locals can&apos;t scroll past.
+          </p>
+        </div>
       </div>
 
-      <div className="footer-meta">
-        <span>© {year} — All Rights Reserved</span>
-        <a href="#top" data-hover>
-          Back to top <ArrowUpRight size={13} />
-        </a>
-        <span>EST © 2023 — Auvance Studio</span>
-      </div>
-
-      <div className="footer-contacts">
-        <div className="fc">
-          <h5>Phone Number</h5>
-          <a href="tel:+12369780637" data-hover>
-            +1 (236) 978 0637
-          </a>
+      <div className="footer-cols">
+        <div className="fcol">
+          <h5>Menu</h5>
+          <Link href="/#work" data-hover>Work</Link>
+          <Link href="/#studio" data-hover>Studio</Link>
+          <Link href="/#process" data-hover>Process</Link>
+          <Link href="/#faq" data-hover>FAQ</Link>
+          <Link href="/#contact" data-hover>Contact</Link>
         </div>
-        <div className="fc">
-          <h5>Location</h5>
-          <span>Based in Vancouver, BC</span>
-        </div>
-        <div className="fc">
-          <h5>Address</h5>
+        <div className="fcol">
+          <h5>Contact</h5>
+          <a href="mailto:therealauvance@gmail.com" data-hover>therealauvance@gmail.com</a>
+          <a href="tel:+12369780637" data-hover>+1 (236) 978 0637</a>
           <span>2628 Duke St, Kingsway</span>
+          <span>Vancouver, BC</span>
         </div>
-        <div className="fc">
-          <h5>Email</h5>
-          <a href="mailto:therealauvance@gmail.com" data-hover>
-            therealauvance@gmail.com
-          </a>
+        <div className="fcol">
+          <h5>Studio</h5>
+          <span>Site by Auvance</span>
+          <span>Est. © 2023</span>
+          <span>Vancouver web studio</span>
+        </div>
+        <div className="fcol fcol--media">
+          <div
+            className="fcol-img"
+            aria-hidden
+            style={{ backgroundImage: `url('${works[0].image}')` }}
+          />
         </div>
       </div>
 
-      <div className="footer-divider" />
-      <div className="footer-brand">auvANcE</div>
+      <div className="footer-bottom">
+        <a href="#top" className="footer-backtop" data-hover>
+          Back to top (↑)
+        </a>
+        <span>© {year} Auvance. All rights reserved.</span>
+      </div>
     </footer>
   );
 }

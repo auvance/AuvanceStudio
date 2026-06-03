@@ -271,18 +271,20 @@ export function useHorizontalScroll<T extends HTMLElement>() {
     if (!section) return;
     const track = section.querySelector<HTMLElement>(".h-track");
     if (!track) return;
-    // Match the CSS breakpoint exactly (max-width: 900px → vertical stack).
-    if (prefersReduced() || window.matchMedia("(max-width: 900px)").matches) return;
 
-    // Sticky-based (NOT pin) so GSAP never reparents the DOM — pinning wraps
-    // the node in a pin-spacer, which makes React's removeChild throw on
-    // unmount/route-change ("node to be removed is not a child of this node").
-    const ctx = gsap.context(() => {
+    // gsap.matchMedia → sets up on desktop, tears down on mobile, and
+    // re-initialises automatically across the breakpoint / on resize. This
+    // fixes the rail "not responding" when the component mounted at a narrow
+    // width. Sticky-based (NOT pin) so GSAP never reparents the DOM (pinning
+    // wraps the node in a pin-spacer → React removeChild crash on nav).
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 901px) and (prefers-reduced-motion: no-preference)", () => {
       const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
       const setHeight = () => {
         section.style.height = window.innerHeight + distance() + "px";
       };
       setHeight();
+      // scroll down → track moves left (advance right); scroll up → reverse.
       gsap.to(track, {
         x: () => -distance(),
         ease: "none",
@@ -295,11 +297,13 @@ export function useHorizontalScroll<T extends HTMLElement>() {
           onRefresh: setHeight,
         },
       });
-    }, section);
-    return () => {
-      ctx.revert();
-      section.style.height = "";
-    };
+      return () => {
+        section.style.height = "";
+        gsap.set(track, { x: 0 });
+      };
+    });
+
+    return () => mm.revert();
   }, []);
   return ref;
 }
