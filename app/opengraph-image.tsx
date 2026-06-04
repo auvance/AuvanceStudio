@@ -53,7 +53,7 @@ export default function OpengraphImage() {
           }}
         >
           <span>You own everything · Fixed price · No lock-in</span>
-          <span style={{ color: "#eceef1" }}>auvance.ca</span>
+          <span style={{ color: "#eceef1" }}>auvancestudio.ca</span>
         </div>
       </div>
     ),

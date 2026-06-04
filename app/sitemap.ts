@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { works } from "./works";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://auvance.ca";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.auvancestudio.ca";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -13,5 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly" as const,
       priority: 0.8,
     })),
+    { url: `${SITE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${SITE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
 }

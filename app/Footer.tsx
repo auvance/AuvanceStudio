@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { works } from "./works";
+import { prefersReducedMotion } from "./motion";
+import { MotionToggle } from "./theme";
 
 const TITLE = "Auvance.";
 
@@ -17,7 +19,7 @@ export default function Footer() {
     if (!title) return;
     const chars = title.querySelectorAll<HTMLElement>(".ft-char");
     if (!chars.length) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       gsap.set(chars, { yPercent: 0 });
       return;
     }
@@ -69,6 +71,9 @@ export default function Footer() {
         <div className="fcol">
           <h5>Contact</h5>
           <a href="mailto:therealauvance@gmail.com" data-hover>therealauvance@gmail.com</a>
+          <span className="todo" role="note" style={{ marginTop: 4 }}>
+            ⚠ Switch to hello@auvancestudio.ca (set up the Zoho inbox)
+          </span>
           <a href="tel:+12369780637" data-hover>+1 (236) 978 0637</a>
           <span>2628 Duke St, Kingsway</span>
           <span>Vancouver, BC</span>
@@ -78,6 +83,8 @@ export default function Footer() {
           <span>Site by Auvance</span>
           <span>Est. © 2023</span>
           <span>Vancouver web studio</span>
+          <Link href="/privacy" data-hover>Privacy Policy</Link>
+          <Link href="/terms" data-hover>Terms of Use</Link>
         </div>
         <div className="fcol fcol--media">
           <div
@@ -92,6 +99,7 @@ export default function Footer() {
         <a href="#top" className="footer-backtop" data-hover>
           Back to top (↑)
         </a>
+        <MotionToggle />
         <span>© {year} Auvance. All rights reserved.</span>
       </div>
     </footer>

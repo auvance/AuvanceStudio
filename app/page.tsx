@@ -13,7 +13,21 @@ import {
 } from "./animations";
 import { works } from "./works";
 import { useStinger } from "./Stinger";
-import { Plus, Asterisk, Globe, ArrowUpRight, Dot, gradientPreview } from "./svg";
+import { prefersReducedMotion } from "./motion";
+import { CalButton } from "./Cal";
+import {
+  Plus,
+  Asterisk,
+  Globe,
+  ArrowUpRight,
+  Dot,
+  Search,
+  PenNib,
+  Code,
+  Key,
+  Check,
+  gradientPreview,
+} from "./svg";
 
 /* ============================================
    AUVANCE STUDIO — Home
@@ -29,9 +43,12 @@ export default function Page() {
       <Stats />
       <Manifesto />
       <Approach />
+      <About />
       <Services />
+      <Offer />
       <Process />
       <WorkRail />
+      <Testimonials />
       <FAQ />
       <Contact />
     </>
@@ -220,10 +237,10 @@ function Stats() {
   return (
     <div className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
       <div className="stats">
+        <StaticStat symbol="$1.5k" label="Founding-client rate" />
+        <Stat value={21} suffix="d" label="From kickoff to live" />
         <Stat value={100} suffix="%" label="You own everything" />
-        <Stat value={1} suffix="×" label="Flat build fee" />
-        <Stat value={14} suffix="d" label="Typical timeline" />
-        <StaticStat symbol="∞" label="Support after launch" />
+        <StaticStat symbol="1:1" label="A real person, always" />
       </div>
     </div>
   );
@@ -249,6 +266,147 @@ function StaticStat({ symbol, label }: { symbol: string; label: string }) {
       <div className="stat-num accent">{symbol}</div>
       <div className="stat-label">{label}</div>
     </div>
+  );
+}
+
+/* --- TODO marker — renders red on the site for anything the founder
+   still needs to supply (photo, real domain email, testimonials, metrics) --- */
+function Todo({ children, block }: { children: React.ReactNode; block?: boolean }) {
+  if (block)
+    return (
+      <div className="todo" role="note">
+        ⚠ {children}
+      </div>
+    );
+  return (
+    <span className="todo" role="note">
+      ⚠ {children}
+    </span>
+  );
+}
+
+/* --- ABOUT / founder (id=about) --- */
+function About() {
+  const ref = useReveal<HTMLDivElement>({ y: 30 });
+  const [photoOk, setPhotoOk] = useState(true);
+  return (
+    <section id="about" className="section">
+      <div className="spine-label">Who you work with</div>
+      <div ref={ref} className="about-grid">
+        <div className="about-photo">
+          {photoOk ? (
+            <img
+              className="about-photo-img"
+              src="/portrait.jpg"
+              alt="Aakif — founder of Auvance"
+              onError={() => setPhotoOk(false)}
+            />
+          ) : (
+            <Todo block>Add your portrait — save it as public/portrait.jpg</Todo>
+          )}
+        </div>
+        <div>
+          <h2 className="h2" style={{ marginBottom: "1.2rem" }}>
+            A real person — not an agency.
+          </h2>
+          <p className="body-lg" style={{ marginBottom: "1rem" }}>
+            I&apos;m a Vancouver-based web designer running Auvance solo. You work directly with me —
+            no account managers, no ticket queue. Text me and I answer.
+          </p>
+          <p className="body-lg">
+            I&apos;m early in my studio&apos;s journey, so you get my full attention at a
+            founding-client rate — and a site I&apos;ll stand behind.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* --- OFFER / pricing (id=offer) --- */
+function Offer() {
+  const head = useReveal<HTMLHeadingElement>();
+  return (
+    <section id="offer" className="section">
+      <div className="spine-label">The Offer</div>
+      <h2 ref={head} className="h2" style={{ maxWidth: 820, marginBottom: "2.5rem" }}>
+        One simple package. Flat price. You own everything.
+      </h2>
+      <div className="offer-card">
+        <div>
+          <div className="offer-name">The Launch Site</div>
+          <div className="offer-price">
+            <span className="offer-list">$2,000</span>
+            <span className="offer-found">$1,500 founding rate</span>
+          </div>
+          <p className="offer-note">
+            Founding rate for my first three Vancouver clients — locked in before the price goes up
+            as the case studies roll in. Flat price agreed upfront, no surprises.
+          </p>
+          <a href="#contact" className="btn btn-primary" data-hover>
+            <span>Start your project →</span>
+          </a>
+        </div>
+        <ul className="offer-list-items">
+          <li>Custom, hand-built site — live in ~3 weeks</li>
+          <li>Mobile-first and fast</li>
+          <li>Google Business Profile + local SEO basics</li>
+          <li>You own the domain, hosting &amp; code — no lock-in</li>
+          <li>50% deposit to start · up to 2 revision rounds</li>
+          <li>You text a real person — not a ticket queue</li>
+        </ul>
+      </div>
+
+      <div className="offer-addons">
+        <div className="offer-addons-head">Need more? Add it on — same flat, upfront pricing.</div>
+        <div className="addon-grid">
+          {(
+            [
+              ["Copywriting", "I write your site content", "+$300"],
+              ["Extra pages", "beyond the core set", "+$150 / page"],
+              ["Online store / booking", "sell products or take bookings", "+$600"],
+              ["Care plan", "hosting, updates & edits", "+$75 / mo"],
+            ] as const
+          ).map(([name, note, price]) => (
+            <div className="addon-item" key={name}>
+              <span className="addon-name">
+                {name} <span className="addon-note" style={{ color: "var(--muted)" }}>— {note}</span>
+              </span>
+              <span className="addon-price">{price}</span>
+            </div>
+          ))}
+        </div>
+        <p className="offer-found-note">
+          No confusing tiers — one core build, plus only what you actually need.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* --- TESTIMONIALS (id=testimonials) --- */
+function Testimonials() {
+  const head = useReveal<HTMLHeadingElement>();
+  const slots: [string, string][] = [
+    ["Abu Bakr Siddiq Mosque", "Add a 1–2 line testimonial + a real outcome (sign-ups, calls, etc.)"],
+    ["Student Software Association", "Add a 1–2 line testimonial + a real outcome"],
+    ["Abwab Ventures", "Add a testimonial once the project is finished"],
+  ];
+  return (
+    <section id="testimonials" className="section">
+      <div className="spine-label">What clients say</div>
+      <h2 ref={head} className="h2" style={{ maxWidth: 700, marginBottom: "2.5rem" }}>
+        Proof, in their words.
+      </h2>
+      <div className="testi-grid">
+        {slots.map(([who, todo]) => (
+          <div key={who} className="testi-card">
+            <Todo block>{todo}</Todo>
+            <div className="testi-who">— {who}</div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -299,6 +457,134 @@ function Approach() {
     ["03", "You Own Everything", "Domain, hosting, code. After launch it's 100% yours — no platform lock-in.", "100% ownership", "Ownership"],
     ["04", "One Text Away", "We don't disappear at launch. Need a change next year? Message us — we pick up.", "Ongoing support", "Support"],
   ];
+  const stackRef = useRef<HTMLDivElement>(null);
+
+  // Desktop / tablet: an intro fanned-deck deal-in, then a SPOTLIGHT cycle —
+  // the cards stay in the fan; one card at a time lifts forward at full
+  // brightness while the others dim, auto-advancing every ~4.5s. Clicking any
+  // card jumps the spotlight straight to it (and restarts the timer). Mobile
+  // keeps a simple fade-up. Skipped when motion is reduced (static fan).
+  useEffect(() => {
+    const el = stackRef.current;
+    if (!el) return;
+    const cardEls = gsap.utils.toArray<HTMLElement>(el.querySelectorAll(".stack-card"));
+    if (cardEls.length < 4) return;
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      if (prefersReducedMotion()) return; // CSS keeps a static fan
+      const N = cardEls.length;
+      let active = 0;
+      let started = false;
+      let ready = false;
+      let timer: number | undefined;
+
+      // Light the active card, dim + recede the rest.
+      const apply = () => {
+        cardEls.forEach((c, i) => {
+          const on = i === active;
+          c.classList.toggle("is-active", on);
+          c.style.zIndex = on ? "30" : String(i + 1);
+          gsap.to(c, {
+            opacity: on ? 1 : 0.32,
+            scale: on ? 1.07 : 0.94,
+            y: on ? -26 : 0,
+            duration: 0.55,
+            ease: "power3.out",
+            overwrite: "auto",
+          });
+        });
+      };
+
+      const advance = () => {
+        active = (active + 1) % N;
+        apply();
+      };
+      const start = () => {
+        if (ready && timer == null) timer = window.setInterval(advance, 4500);
+      };
+      const stop = () => {
+        if (timer != null) {
+          window.clearInterval(timer);
+          timer = undefined;
+        }
+      };
+
+      const begin = () => {
+        if (started) return;
+        started = true;
+        const tl = gsap.timeline();
+        // 1) fanned-deck deal-in
+        tl.from(cardEls, {
+          xPercent: 64,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          stagger: 0.16,
+        });
+        // 2) begin the spotlight cycle
+        tl.add(() => {
+          active = 0;
+          ready = true;
+          apply();
+          start();
+        }, "+=0.3");
+      };
+
+      // Click any card → spotlight it immediately, restart the timer.
+      const handlers = cardEls.map((c, i) => {
+        const h = () => {
+          active = i;
+          apply();
+          stop();
+          start();
+        };
+        c.addEventListener("click", h);
+        return h;
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            begin();
+            start();
+          } else {
+            stop();
+          }
+        },
+        { threshold: 0.3 }
+      );
+      io.observe(el);
+
+      return () => {
+        stop();
+        io.disconnect();
+        cardEls.forEach((c, i) => {
+          c.removeEventListener("click", handlers[i]);
+          c.classList.remove("is-active");
+        });
+        gsap.killTweensOf(cardEls);
+        gsap.set(cardEls, { clearProps: "all" });
+      };
+    });
+
+    mm.add("(max-width: 767px)", () => {
+      const ctx = gsap.context(() => {
+        gsap.from(cardEls, {
+          y: 48,
+          autoAlpha: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: { trigger: el, start: "top 80%" },
+        });
+      }, el);
+      return () => ctx.revert();
+    });
+
+    return () => mm.revert();
+  }, []);
+
   return (
     <section id="studio" className="section">
       <div className="ghost-text" style={{ top: "2%", right: "-2%" }}>
@@ -310,7 +596,7 @@ function Approach() {
           A Vancouver studio that picks up the phone, prices it flat, and hands you everything you own.
         </span>
       </EditorialHead>
-      <div className="stack">
+      <div className="stack stack--show" ref={stackRef}>
         {cards.map((c, i) => (
           <StackCard key={c[0]} i={i} num={c[0]} title={c[1]} desc={c[2]} meta={c[3]} chip={c[4]} />
         ))}
@@ -335,9 +621,8 @@ function StackCard({
   chip: string;
 }) {
   const inner = useTilt<HTMLDivElement>(6);
-  const reveal = useReveal<HTMLDivElement>({ y: 48 });
   return (
-    <div ref={reveal} className="stack-card" style={{ top: `${12 + i * 2.2}vh` }}>
+    <div className="stack-card" data-i={i} data-hover>
       <div
         className="stack-card-rot"
         style={{ "--rot": i % 2 ? "-1.5deg" : "1.5deg" } as React.CSSProperties}
@@ -507,13 +792,14 @@ function ProcCard({
   offset: string;
 }) {
   const ref = useParallax<HTMLDivElement>(speed);
+  const Icon = [Search, PenNib, Code, Key][i] ?? Asterisk;
   return (
     <div className="proc-card" style={{ marginTop: offset }}>
       <div ref={ref} className="proc-card-inner">
         <span className="num">0{i + 1}</span>
         <h3>{title}</h3>
-        <span className="proc-aster">
-          <Asterisk size={30} />
+        <span className="proc-aster proc-icon">
+          <Icon size={30} />
         </span>
         <p>{desc}</p>
       </div>
@@ -607,9 +893,11 @@ function WorkSlide({ w, i, total }: { w: (typeof works)[number]; i: number; tota
           {w.name} <ArrowUpRight size={24} />
         </div>
         <p className="body-lg">{w.summary}</p>
-        <div className="ws-stat">
-          <b>{w.stat.value}</b>
-          <span className="label">{w.stat.label}</span>
+        <div className="ws-stat" style={{ display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "flex-start" }}>
+          <Todo>Add a real result metric (e.g. ↑ enquiries, calls)</Todo>
+          {w.slug === "abu-bakr-siddiq" && (
+            <Todo>Rehost on a real domain — currently a free webflow.io subdomain</Todo>
+          )}
         </div>
         <div className="label" style={{ marginTop: "1.5rem" }}>
           {w.services.join(" · ")} — {w.year}
@@ -708,7 +996,7 @@ function Contact() {
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotion();
     if (reduce) {
       gsap.set(section.querySelector(".contact-head"), { scale: 1, autoAlpha: 1, filter: "none" });
       gsap.set(section.querySelectorAll(".cw"), { yPercent: 0 });
@@ -820,13 +1108,42 @@ async function submitContact(
 
 function CStatusMsg({ status }: { status: CStatus }) {
   if (status === "sending") return <p className="cform-ok" role="status">Sending…</p>;
-  if (status === "ok")
-    return <p className="cform-ok" role="status">Thanks — we&apos;ll be in touch shortly.</p>;
   if (status === "rate")
     return <p className="cform-ok" role="alert">Too many attempts — try again in a minute.</p>;
   if (status === "err")
     return <p className="cform-ok" role="alert">Please check your details and try again.</p>;
   return null;
+}
+
+function FormSuccess({
+  no,
+  heading,
+  body,
+  onReset,
+}: {
+  no: string;
+  heading: string;
+  body: string;
+  onReset: () => void;
+}) {
+  return (
+    <div className="cform" aria-label="Submitted">
+      <div className="cform-head">
+        <h3>Sent</h3>
+        <span className="cform-no">{no}</span>
+      </div>
+      <div className="cform-success" role="status">
+        <span className="tick">
+          <Check size={22} />
+        </span>
+        <h4>{heading}</h4>
+        <p>{body}</p>
+        <button type="button" onClick={onReset} data-hover>
+          Send another →
+        </button>
+      </div>
+    </div>
+  );
 }
 
 function BookCallForm() {
@@ -849,13 +1166,30 @@ function BookCallForm() {
       setStatus
     );
   };
+  if (status === "ok")
+    return (
+      <FormSuccess
+        no="A"
+        heading="Your call request is in."
+        body="I'll personally get back to you within one business day to lock in a time. Talk soon."
+        onReset={() => setStatus("")}
+      />
+    );
   return (
     <form className="cform" onSubmit={onSubmit} aria-label="Book a call">
       <div className="cform-head">
         <h3>Book a Call</h3>
         <span className="cform-no">A</span>
       </div>
-      <p className="sub">A free 20-minute discovery call. Tell us when suits you.</p>
+      <p className="sub">
+        Grab a free 15-minute intro call — pick a time instantly, or send your details below.
+      </p>
+      <CalButton className="btn btn-primary cal-cta">
+        <span>Pick a time — 15-min call →</span>
+      </CalButton>
+      <div className="label" style={{ textAlign: "center", margin: "0.4rem 0 1rem", opacity: 0.6 }}>
+        or send your details
+      </div>
       <div className="field">
         <label htmlFor="bc-name">Name</label>
         <input id="bc-name" name="name" required autoComplete="name" />
@@ -914,6 +1248,15 @@ function QuoteForm() {
       setStatus
     );
   };
+  if (status === "ok")
+    return (
+      <FormSuccess
+        no="B"
+        heading="Your quote request is in."
+        body="I'll send you a clear, fixed-price estimate within one business day — no obligation."
+        onReset={() => setStatus("")}
+      />
+    );
   return (
     <form className="cform" onSubmit={onSubmit} aria-label="Get a quote">
       <div className="cform-head">
@@ -941,10 +1284,9 @@ function QuoteForm() {
           <option value="" disabled>
             Select a range
           </option>
-          <option>Under $2k</option>
-          <option>$2k – $5k</option>
-          <option>$5k – $10k</option>
-          <option>$10k+</option>
+          <option>Founding rate — ~$1,500</option>
+          <option>$2,000 – $2,500</option>
+          <option>$3,000+</option>
           <option>Not sure yet</option>
         </select>
       </div>

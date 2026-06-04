@@ -28,7 +28,7 @@ export async function generateMetadata({
   };
 }
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://auvance.ca";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.auvancestudio.ca";
 
 export default async function WorkPage({
   params,

@@ -107,6 +107,117 @@ export function Dot({ className, style, size = 10 }: P) {
   );
 }
 
+/* --- Process step icons --- */
+
+// Discovery — a magnifier (we look into your business first).
+export function Search({ className, style, size = 28 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="m20 20-4.6-4.6" />
+    </svg>
+  );
+}
+
+// Design — a pen nib (we draw and approve every stage).
+export function PenNib({ className, style, size = 28 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M4 20 14.5 9.5l-.8-3.4L18.4 3l2.6 2.6-3.1 4.7-3.4-.8L4 20Z" />
+      <path d="m11.5 12.5 1.8 1.8" />
+      <circle cx="15.7" cy="8.3" r="1" />
+    </svg>
+  );
+}
+
+// Build — code brackets (we write and ship it).
+export function Code({ className, style, size = 28 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16" />
+    </svg>
+  );
+}
+
+// Yours — a key (you own it outright).
+export function Key({ className, style, size = 28 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="7.5" cy="15.5" r="4.5" />
+      <path d="m10.8 12.2 8.2-8.2M16 5l2.5 2.5M14 7l2.5 2.5" />
+    </svg>
+  );
+}
+
+// Check — used in the form success panel.
+export function Check({ className, style, size = 22 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="m5 12.5 4.5 4.5L19 7" />
+    </svg>
+  );
+}
+
 /* On-brand gradient placeholders for the service hover-previews
    (no image assets needed; swap for real shots anytime). */
 export function gradientPreview(i: number, label: string) {

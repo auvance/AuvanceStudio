@@ -136,6 +136,46 @@ async function deliver(data: Clean): Promise<boolean> {
   return res.ok;
 }
 
+/* --------------------------------------------------------------------------
+   Autoresponder — a transactional confirmation back to the person who wrote
+   in (a reply to a solicited inquiry, so CASL-safe). Best-effort: never blocks
+   or fails the request. Skipped when no provider is configured.
+   -------------------------------------------------------------------------- */
+async function acknowledge(data: Clean): Promise<void> {
+  const key = process.env.RESEND_API_KEY;
+  const from = process.env.CONTACT_FROM_EMAIL;
+  const replyTo = process.env.CONTACT_TO_EMAIL;
+  if (!key || !from || !data.email) return;
+
+  const first = (data.name || "there").split(/\s+/)[0];
+  const line =
+    data.type === "quote"
+      ? "I've got your project details and I'll send a clear, fixed-price estimate within one business day."
+      : "I've got your call request and I'll reply within one business day to lock in a time.";
+  const text = `Hi ${first},
+
+Thanks for reaching out to Auvance — this is a quick note to confirm I received your message.
+
+${line}
+
+You'll always work directly with me — a real person, not a ticket queue.
+
+— Auvance
+Vancouver web studio`;
+
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from,
+      to: data.email,
+      reply_to: replyTo,
+      subject: "Thanks — I've got your message (Auvance)",
+      text,
+    }),
+  });
+}
+
 export async function POST(req: NextRequest) {
   sweep();
 
@@ -167,6 +207,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const delivered = await deliver(result.data);
+    // Fire the confirmation back to the sender — best-effort, never blocks.
+    if (delivered) acknowledge(result.data).catch(() => {});
     return NextResponse.json({ ok: true, delivered });
   } catch {
     // Never leak provider errors/keys to the client.

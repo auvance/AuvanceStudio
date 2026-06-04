@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { gsap } from "gsap";
+import { prefersReducedMotion } from "./motion";
 
 /**
  * Ambient 3D background. A slowly rotating wireframe icosahedron wrapped in a
@@ -15,7 +16,7 @@ export default function ThreeBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotion();
     const canvas = canvasRef.current;
     if (!canvas) return;
 

@@ -3,12 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { prefersReducedMotion } from "./motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const prefersReduced = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const prefersReduced = () => prefersReducedMotion();
 
 /**
  * useReveal — fades + slides an element up as it enters the viewport.
@@ -271,6 +270,7 @@ export function useHorizontalScroll<T extends HTMLElement>() {
     if (!section) return;
     const track = section.querySelector<HTMLElement>(".h-track");
     if (!track) return;
+    if (prefersReduced()) return; // static vertical stack when motion is reduced
 
     // gsap.matchMedia → sets up on desktop, tears down on mobile, and
     // re-initialises automatically across the breakpoint / on resize. This

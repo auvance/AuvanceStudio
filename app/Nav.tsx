@@ -79,8 +79,11 @@ export default function Nav() {
             <NavLink id="work">
               <span className="idx">02</span> Work <span className="count">({count})</span>
             </NavLink>
+            <NavLink id="offer">
+              <span className="idx">03</span> Pricing
+            </NavLink>
             <NavLink id="process">
-              <span className="idx">03</span> Process
+              <span className="idx">04</span> Process
             </NavLink>
             <a ref={cta} href={contactHref} className="btn btn-ghost nav-cta" data-hover>
               <span>
@@ -110,13 +113,16 @@ export default function Nav() {
           <MenuLink id="work" idx="02">
             Work
           </MenuLink>
-          <MenuLink id="process" idx="03">
+          <MenuLink id="offer" idx="03">
+            Pricing
+          </MenuLink>
+          <MenuLink id="process" idx="04">
             Process
           </MenuLink>
-          <MenuLink id="faq" idx="04">
+          <MenuLink id="faq" idx="05">
             FAQ
           </MenuLink>
-          <MenuLink id="contact" idx="05">
+          <MenuLink id="contact" idx="06">
             Contact
           </MenuLink>
         </nav>

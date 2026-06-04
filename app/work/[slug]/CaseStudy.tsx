@@ -54,6 +54,11 @@ export default function CaseStudy({ work }: { work: Work }) {
               <a href={work.liveUrl} target="_blank" rel="noreferrer" data-hover style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
                 Visit site <ArrowUpRight size={14} />
               </a>
+              {work.liveUrl.includes("webflow.io") && (
+                <div className="todo" role="note" style={{ marginTop: 6 }}>
+                  ⚠ Rehost on a real domain — free webflow.io subdomain
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -83,8 +88,10 @@ export default function CaseStudy({ work }: { work: Work }) {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="cs-cols" style={{ alignItems: "center", marginBottom: "clamp(3rem,7vw,6rem)" }}>
           <div>
-            <div className="stat-num accent">{work.stat.value}</div>
-            <div className="stat-label" style={{ maxWidth: 280 }}>
+            <span className="todo" role="note">
+              ⚠ Add a real headline metric for this project (replace the placeholder)
+            </span>
+            <div className="stat-label" style={{ maxWidth: 280, marginTop: 8 }}>
               {work.stat.label}
             </div>
           </div>

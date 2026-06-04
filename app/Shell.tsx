@@ -11,6 +11,8 @@ import Nav from "./Nav";
 import Footer from "./Footer";
 import Preloader from "./Preloader";
 import { StingerProvider } from "./Stinger";
+import { MotionHint } from "./theme";
+import { prefersReducedMotion } from "./motion";
 
 /**
  * Global chrome shared across every route: smooth scroll, 3D background,
@@ -36,7 +38,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
     const spacer = spacerRef.current;
     if (!footer || !spacer) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = prefersReducedMotion();
     const isDesktop = () => window.matchMedia("(min-width: 769px)").matches;
     let H = 0;
 
@@ -84,6 +86,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         <Grain />
         <Cursor />
         {isHome && <Preloader />}
+        <MotionHint />
         <Nav />
         <main id="main" className="page-main" tabIndex={-1}>
           {children}

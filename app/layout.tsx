@@ -4,7 +4,7 @@ import { monument, neueMontreal, overusedGrotesk, jetbrainsMono, dirtyline } fro
 import { themeScript } from "./theme";
 import Shell from "./Shell";
 
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://auvance.ca";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.auvancestudio.ca";
 const DESCRIPTION =
   "Auvance is a Vancouver web studio building custom, high-converting websites for local businesses. Fixed price. You own everything. No lock-in.";
 
