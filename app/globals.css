@@ -2483,7 +2483,7 @@ body.cursor-ready *:focus-visible {
   color: inherit;
   font: inherit;
   cursor: pointer;
-  padding: clamp(1.1rem, 2.8vw, 2rem) 0;
+  padding: clamp(1.1rem, 2.8vw, 2rem) clamp(1.8rem, 7vw, 3rem);
 }
 .svc2-no {
   position: absolute;
@@ -2504,6 +2504,20 @@ body.cursor-ready *:focus-visible {
   transition: color 0.35s var(--ease-out);
 }
 .svc2-item[data-open="true"] .svc2-name {
+  color: var(--accent);
+}
+/* expand affordance — a + that rotates to × when open */
+.svc2-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  transition: transform 0.4s var(--ease-out), color 0.4s var(--ease-out);
+  flex: none;
+}
+.svc2-item[data-open="true"] .svc2-toggle {
+  transform: translateY(-50%) rotate(45deg);
   color: var(--accent);
 }
 .svc2-detail {
@@ -2765,6 +2779,13 @@ body.cursor-ready *:focus-visible {
   letter-spacing: -0.04em;
   text-transform: uppercase;
   overflow: hidden;
+  white-space: nowrap; /* Monument is extended/wide — never break "Auvance." mid-word */
+}
+@media (max-width: 600px) {
+  /* shrink so the wide wordmark fits one line instead of warping to "AUVAN / CE" */
+  .footer-title {
+    font-size: clamp(1.7rem, 8.5vw, 3rem);
+  }
 }
 .ft-char {
   display: inline-block;
@@ -3122,6 +3143,13 @@ div.todo {
   }
   .addon-item {
     border-right: none;
+    /* stack name above price so "/ page" & "/ month" aren't clipped */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .addon-price {
+    white-space: normal;
   }
   .addon-item:nth-last-child(1) {
     border-bottom: none;

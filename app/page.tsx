@@ -297,7 +297,7 @@ function About() {
           {photoOk ? (
             <img
               className="about-photo-img"
-              src="/portrait.jpg"
+              src="/PortraitOne.jpeg"
               alt="Aakif — founder of Auvance"
               onError={() => setPhotoOk(false)}
             />
@@ -732,6 +732,7 @@ function Svc2Item({ i, s }: { i: number; s: Service }) {
       >
         <span className="svc2-no">0{i + 1}</span>
         <span className="svc2-name">{s.name}</span>
+        <Plus className="svc2-toggle" size={26} aria-hidden />
       </button>
       <div className="svc2-detail" id={id} ref={ref}>
         <div className="svc2-detail-inner">

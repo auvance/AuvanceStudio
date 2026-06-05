@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { works } from "./works";
 import { prefersReducedMotion } from "./motion";
 import { MotionToggle } from "./theme";
 
@@ -90,7 +89,7 @@ export default function Footer() {
           <div
             className="fcol-img"
             aria-hidden
-            style={{ backgroundImage: `url('${works[0].image}')` }}
+            style={{ backgroundImage: "url('/PortrairTwo.jpeg')", backgroundPosition: "center 22%" }}
           />
         </div>
       </div>

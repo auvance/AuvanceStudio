@@ -55,7 +55,13 @@ export default function Preloader() {
 
       gsap.set(crownRef.current, { transformPerspective: 700 });
       gsap.set(sparkleRef.current, { autoAlpha: 0, scale: 0 });
-      const colH = uColRef.current ? uColRef.current.clientHeight : 0;
+      // Measure a real cell's *fractional* height (getBoundingClientRect, not
+      // the integer clientHeight) — otherwise rounding error × 100 cells leaves
+      // the ones digit stranded between 9 and 0 at the end.
+      const cellEl = uStripRef.current?.querySelector(".pl-cell") as HTMLElement | null;
+      const colH = cellEl
+        ? cellEl.getBoundingClientRect().height
+        : uColRef.current?.clientHeight ?? 0;
       const setU = gsap.quickSetter(uStripRef.current as Element, "y", "px");
       const setT = gsap.quickSetter(tStripRef.current as Element, "y", "px");
       const setH = gsap.quickSetter(hStripRef.current as Element, "y", "px");
