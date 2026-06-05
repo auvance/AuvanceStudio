@@ -909,6 +909,13 @@ html.lenis body {
   will-change: transform;
   /* GSAP owns the transform (x/y/scale) — no CSS translate here. */
   mix-blend-mode: difference;
+  display: none; /* only shown once the desktop cursor effect activates */
+}
+body.cursor-ready .cursor-dot {
+  display: block;
+}
+body.cursor-ready .cursor-ring {
+  display: grid;
 }
 .cursor-dot {
   width: 7px;
@@ -919,8 +926,7 @@ html.lenis body {
   width: 38px;
   height: 38px;
   border: 1px solid rgba(255, 255, 255, 0.6);
-  display: grid;
-  place-items: center;
+  place-items: center; /* display:grid is applied only via body.cursor-ready */
 }
 .cursor-ring .cursor-label {
   font-family: var(--font-mono);
@@ -1131,66 +1137,76 @@ body.cursor-ready * {
 .menu-btn {
   display: none;
   flex-direction: column;
-  gap: 5px;
-  width: 30px;
-  padding: 8px 0;
+  justify-content: center;
+  gap: 7px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  position: relative;
+  z-index: 220; /* above the overlay so it stays clickable to close */
 }
+/* premium 2-line hamburger */
 .menu-btn span {
   display: block;
-  height: 1.5px;
+  height: 2px;
   width: 100%;
   background: var(--text);
-  transition: transform 0.4s var(--ease-out), opacity 0.3s var(--ease-out);
+  border-radius: 2px;
+  transition: transform 0.45s var(--ease-out), background-color 0.3s var(--ease-out);
+}
+/* the two lines cross into an ✕ when open (white so it reads on the dark overlay) */
+.menu-btn.open span {
+  background: #fff;
 }
 .menu-btn.open span:nth-child(1) {
-  transform: translateY(6.5px) rotate(45deg);
+  transform: translateY(4.5px) rotate(45deg);
 }
 .menu-btn.open span:nth-child(2) {
-  opacity: 0;
-}
-.menu-btn.open span:nth-child(3) {
-  transform: translateY(-6.5px) rotate(-45deg);
+  transform: translateY(-4.5px) rotate(-45deg);
 }
 
-/* Full-screen mobile menu */
+/* Full-screen mobile menu — slides in from the right, white on black */
 .menu-overlay {
   position: fixed;
   inset: 0;
-  z-index: 190; /* below the nav so the hamburger (now an ✕) stays clickable to close */
-  background: var(--bg);
+  z-index: 190;
+  background: #0c0d0f;
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: max(90px, 14vh) var(--margin) max(40px, 6vh);
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path 0.7s var(--ease-inout);
+  padding: max(110px, 16vh) clamp(1.6rem, 7vw, 3.5rem) max(48px, 7vh);
+  transform: translateX(100%);
+  transition: transform 0.6s var(--ease-inout);
   pointer-events: none;
   overflow-x: hidden;
   overflow-y: auto;
 }
 .menu-overlay.open {
-  clip-path: inset(0 0 0 0);
+  transform: translateX(0);
   pointer-events: auto;
 }
-.menu-overlay a {
+.menu-overlay nav a {
+  color: #fff;
   font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(2rem, 9vw, 4.4rem);
   text-transform: uppercase;
   letter-spacing: -0.03em;
-  line-height: 1.05;
+  line-height: 1.08;
   display: flex;
   align-items: baseline;
   gap: 0.8rem;
-  padding: 0.25rem 0;
+  padding: 0.35rem 0;
   max-width: 100%;
   transition: color 0.3s var(--ease-out), padding-left 0.4s var(--ease-out);
 }
-.menu-overlay a:hover {
+.menu-overlay nav a:hover,
+.menu-overlay nav a:active {
   color: var(--accent);
   padding-left: 1rem;
 }
-.menu-overlay a .midx {
+.menu-overlay nav a .midx {
   font-family: var(--font-mono);
   font-size: 0.9rem;
   color: var(--accent);
@@ -1201,10 +1217,12 @@ body.cursor-ready * {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.6);
 }
 .menu-foot a {
   overflow-wrap: anywhere;
   word-break: break-word;
+  color: #fff;
 }
 
 /* ================================================================
@@ -1556,6 +1574,11 @@ body.cursor-ready * {
 @media (max-width: 900px) {
   .work-sticker {
     display: none;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .work-sticker {
+    display: none !important;
   }
 }
 .work-slide .ws-media {
@@ -2233,10 +2256,10 @@ body.cursor-ready *:focus-visible {
   margin-bottom: 1.5rem;
 }
 .field {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 .field label {
   font-family: var(--font-mono);
@@ -2248,25 +2271,34 @@ body.cursor-ready *:focus-visible {
 .field input,
 .field select,
 .field textarea {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 10px 2px;
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 1rem;
-  transition: border-color 0.3s var(--ease-out);
+  font-size: 1.05rem;
+  transition: border-color 0.35s var(--ease-out);
   width: 100%;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-muted);
 }
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  border-color: var(--text);
+  border-bottom-color: var(--accent);
+}
+.field select {
+  appearance: none;
+  cursor: pointer;
 }
 .field textarea {
   resize: vertical;
-  min-height: 92px;
+  min-height: 80px;
 }
 .field-row {
   display: grid;
@@ -3038,6 +3070,25 @@ div.todo {
   cursor: pointer;
   padding: 2px 4px;
   line-height: 1;
+}
+/* keep both first-visit hints from clipping on small screens */
+@media (max-width: 600px) {
+  .crown-tip {
+    white-space: normal;
+    max-width: min(70vw, 240px);
+    line-height: 1.45;
+  }
+  .motion-hint {
+    flex-wrap: wrap;
+    right: clamp(12px, 3vw, 28px);
+    gap: 8px 10px;
+  }
+  .motion-hint-text {
+    flex: 1 1 100%;
+  }
+  .motion-hint-act {
+    margin-left: auto;
+  }
 }
 @keyframes motionHintIn {
   from {

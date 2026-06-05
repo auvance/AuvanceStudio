@@ -38,6 +38,15 @@ export default function Shell({ children }: { children: React.ReactNode }) {
     const spacer = spacerRef.current;
     if (!footer || !spacer) return;
 
+    // The curtain-reveal footer is a home-page flourish. On every other route
+    // (legal pages, case studies) use a normal static footer — otherwise the
+    // fixed footer overlaps short pages' content.
+    if (!isHome) {
+      footer.classList.add("footer--static");
+      spacer.style.height = "0px";
+      return;
+    }
+
     const reduce = prefersReducedMotion();
     const isDesktop = () => window.matchMedia("(min-width: 769px)").matches;
     let H = 0;

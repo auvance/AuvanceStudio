@@ -76,7 +76,7 @@ export default function Terms() {
       <h2>Contact</h2>
       <p>
         Questions about these terms? Email{" "}
-        <a href="mailto:therealauvance@gmail.com">therealauvance@gmail.com</a>.
+        <a href="mailto:aakif@auvancestudio.ca">aakif@auvancestudio.ca</a>.
       </p>
     </main>
   );

@@ -851,7 +851,8 @@ function WorkSlide({ w, i, total }: { w: (typeof works)[number]; i: number; tota
     const card = cardRef.current;
     const sticker = stickerRef.current;
     if (!card || !sticker) return;
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 901px)").matches)
+      return;
     gsap.set(sticker, { xPercent: -50, yPercent: -50, scale: 0.5, rotation: -5, autoAlpha: 0 });
     const xTo = gsap.quickTo(sticker, "x", { duration: 0.3, ease: "power3" });
     const yTo = gsap.quickTo(sticker, "y", { duration: 0.3, ease: "power3" });
@@ -1070,7 +1071,7 @@ function mailtoFallback(p: Record<string, string>) {
     .filter(([k]) => k !== "type" && k !== "company")
     .map(([k, v]) => `${k}: ${v}`)
     .join("\n");
-  window.location.href = `mailto:therealauvance@gmail.com?subject=${encodeURIComponent(
+  window.location.href = `mailto:aakif@auvancestudio.ca?subject=${encodeURIComponent(
     subject
   )}&body=${encodeURIComponent(body)}`;
 }

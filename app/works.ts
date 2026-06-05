@@ -62,6 +62,25 @@ export const works: Work[] = [
     gallery: ["/work/abwab-ventures.png", "/work/abubakr-siddiq.png"],
     liveUrl: "https://abwab.ca",
   },
+  {
+    slug: "student-software-association",
+    name: "Student Software Association",
+    client: "Student Software Association",
+    tag: "Website · Student Community",
+    year: "2025",
+    services: ["Web Design", "Development", "Events"],
+    image: "/work/ssa.png",
+    summary:
+      "A modern home base for a campus software community — events, membership, and resources in one fast, easy-to-update place.",
+    challenge:
+      "The association lived across group chats, a patchwork of docs, and a dated page nobody updated. New students couldn't find meeting times or how to join, and the exec team had no simple way to keep things current.",
+    approach:
+      "We built a clean, fast site centred on the two things that matter: what's happening next, and how to get involved. Events and sign-ups sit front-and-centre, the visual language feels current to a technical student audience, and the whole thing is simple enough for next year's exec to maintain without touching code.",
+    outcome:
+      "A credible, central hub the club is proud to share at every fair and orientation — easier to discover, easier to join, and finally consistent with how active the community actually is.",
+    stat: { value: "↑", label: "Easier to discover and join" },
+    gallery: ["/work/ssa.png"],
+  },
 ];
 
 export const getWork = (slug: string) => works.find((w) => w.slug === slug);

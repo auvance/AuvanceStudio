@@ -16,7 +16,6 @@ export default function Preloader() {
   const [done, setDone] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const crownRef = useRef<HTMLDivElement>(null);
-  const sparkleRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const uColRef = useRef<HTMLDivElement>(null);
   const uStripRef = useRef<HTMLDivElement>(null);
@@ -54,7 +53,6 @@ export default function Preloader() {
       }
 
       gsap.set(crownRef.current, { transformPerspective: 700 });
-      gsap.set(sparkleRef.current, { autoAlpha: 0, scale: 0 });
       // Measure a real cell's *fractional* height (getBoundingClientRect, not
       // the integer clientHeight) — otherwise rounding error × 100 cells leaves
       // the ones digit stranded between 9 and 0 at the end.
@@ -102,14 +100,6 @@ export default function Preloader() {
       // progress bar — expo in/out
       tl.fromTo(barRef.current, { scaleX: 0 }, { scaleX: 1, duration: 2.2, ease: "expo.inOut" }, 0);
 
-      // quick sparkle on the crown when the count lands
-      tl.fromTo(
-        sparkleRef.current,
-        { autoAlpha: 1, scale: 0, rotate: -50 },
-        { scale: 1.35, rotate: 50, duration: 0.28, ease: "power2.out" },
-        2.25
-      ).to(sparkleRef.current, { autoAlpha: 0, scale: 0.4, duration: 0.3, ease: "power2.in" }, ">-0.02");
-
       // outro — lift the curtain, reveal the hero
       tl.to(crownRef.current, { autoAlpha: 0, y: -24, duration: 0.5, ease: "power2.in" }, 2.85)
         .to(".preloader-counter", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power2.in" }, "<")
@@ -146,9 +136,6 @@ export default function Preloader() {
       <div className="preloader-crown" ref={crownRef}>
         <img className="crown-white" src="/crown-white.svg" alt="" />
         <img className="crown-black" src="/crown-black.svg" alt="" />
-      </div>
-      <div className="preloader-sparkle" ref={sparkleRef} aria-hidden>
-        ✦
       </div>
 
       <div className="preloader-counter">

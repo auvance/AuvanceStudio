@@ -2,11 +2,30 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { gsap } from "gsap";
 import { prefersReducedMotion } from "./motion";
 import { MotionToggle } from "./theme";
 
 const TITLE = "Auvance.";
+
+/** On the home page, render a bare #hash anchor so the global SmoothScroll
+ *  handler catches it and eases to the section; elsewhere, route home first. */
+function FooterLink({ id, children }: { id: string; children: React.ReactNode }) {
+  const onHome = usePathname() === "/";
+  if (onHome) {
+    return (
+      <a href={`#${id}`} data-hover>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={`/#${id}`} data-hover>
+      {children}
+    </Link>
+  );
+}
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -61,18 +80,15 @@ export default function Footer() {
       <div className="footer-cols">
         <div className="fcol">
           <h5>Menu</h5>
-          <Link href="/#work" data-hover>Work</Link>
-          <Link href="/#studio" data-hover>Studio</Link>
-          <Link href="/#process" data-hover>Process</Link>
-          <Link href="/#faq" data-hover>FAQ</Link>
-          <Link href="/#contact" data-hover>Contact</Link>
+          <FooterLink id="work">Work</FooterLink>
+          <FooterLink id="studio">Studio</FooterLink>
+          <FooterLink id="process">Process</FooterLink>
+          <FooterLink id="faq">FAQ</FooterLink>
+          <FooterLink id="contact">Contact</FooterLink>
         </div>
         <div className="fcol">
           <h5>Contact</h5>
-          <a href="mailto:therealauvance@gmail.com" data-hover>therealauvance@gmail.com</a>
-          <span className="todo" role="note" style={{ marginTop: 4 }}>
-            ⚠ Switch to hello@auvancestudio.ca (set up the Zoho inbox)
-          </span>
+          <a href="mailto:aakif@auvancestudio.ca" data-hover>aakif@auvancestudio.ca</a>
           <a href="tel:+12369780637" data-hover>+1 (236) 978 0637</a>
           <span>2628 Duke St, Kingsway</span>
           <span>Vancouver, BC</span>

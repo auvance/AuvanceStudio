@@ -88,8 +88,7 @@ export default function PrivacyPolicy() {
       <h2>Contact &amp; complaints</h2>
       <p>
         Questions or requests about your privacy? Email{" "}
-        <a href="mailto:therealauvance@gmail.com">therealauvance@gmail.com</a>{" "}
-        <Todo>Switch to hello@auvancestudio.ca once the inbox is set up</Todo> or call{" "}
+        <a href="mailto:aakif@auvancestudio.ca">aakif@auvancestudio.ca</a> or call{" "}
         <a href="tel:+12369780637">+1 (236) 978 0637</a>.
       </p>
       <p>

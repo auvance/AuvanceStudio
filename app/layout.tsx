@@ -82,7 +82,7 @@ const jsonLd = {
       "@id": `${SITE}/#org`,
       name: "Auvance",
       url: SITE,
-      email: "therealauvance@gmail.com",
+      email: "aakif@auvancestudio.ca",
       telephone: "+1-236-978-0637",
       description: DESCRIPTION,
       areaServed: "Vancouver, BC",

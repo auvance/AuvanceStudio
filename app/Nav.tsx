@@ -100,7 +100,6 @@ export default function Nav() {
           >
             <span />
             <span />
-            <span />
           </button>
         </div>
       </nav>
@@ -130,8 +129,8 @@ export default function Nav() {
           <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
             <Globe size={14} /> Based in Vancouver, BC
           </span>
-          <a href="mailto:therealauvance@gmail.com" data-hover>
-            therealauvance@gmail.com
+          <a href="mailto:aakif@auvancestudio.ca" data-hover>
+            aakif@auvancestudio.ca
           </a>
         </div>
       </div>
