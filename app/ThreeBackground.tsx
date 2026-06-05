@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import * as THREE from "three";
 import { gsap } from "gsap";
 import { prefersReducedMotion } from "./motion";
@@ -14,6 +15,10 @@ import { prefersReducedMotion } from "./motion";
  */
 export default function ThreeBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const pathname = usePathname();
+  // Calm the 3D right down on sub-pages (legal, case studies) so their content
+  // reads as a clean document instead of text floating over a starfield.
+  const isSub = pathname !== "/";
 
   useEffect(() => {
     const reduce = prefersReducedMotion();
@@ -150,5 +155,12 @@ export default function ThreeBackground() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="three-bg" aria-hidden />;
+  return (
+    <canvas
+      ref={canvasRef}
+      className="three-bg"
+      aria-hidden
+      style={isSub ? { opacity: 0.05 } : undefined}
+    />
+  );
 }

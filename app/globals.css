@@ -105,6 +105,7 @@ body {
   z-index: 0;
   pointer-events: none;
   opacity: 0.55;
+  transition: opacity 0.5s ease;
 }
 .page-main {
   position: relative;
@@ -2528,7 +2529,6 @@ body.cursor-ready *:focus-visible {
   flex: 1 1 auto;
   min-width: 0;
   font-family: var(--font-display);
-  font-weight: 900;
   text-transform: uppercase;
   font-size: clamp(1.4rem, 5vw, 4.6rem);
   letter-spacing: -0.03em;
@@ -2627,7 +2627,7 @@ body.cursor-ready *:focus-visible {
     gap: 1.25rem;
   }
   .svc2-name {
-    font-size: clamp(1.5rem, 8vw, 2.4rem);
+    font-size: clamp(1.5rem, 5vw, 2.4rem);
   }
   .svc2-no {
     display: none;
@@ -3282,16 +3282,21 @@ div.todo {
    LEGAL pages (privacy, terms) — simple readable prose
    ================================================================ */
 .legal {
-  max-width: 760px;
+  /* reading column (~720px) plus the site gutter on each side, centred.
+     padding-top clears the fixed nav; horizontal padding uses the real
+     --margin token (the old --gutter var was undefined → zero padding). */
+  max-width: calc(720px + 2 * var(--margin));
   margin: 0 auto;
-  padding: clamp(7rem, 14vw, 11rem) var(--gutter) clamp(4rem, 9vw, 7rem);
+  padding: clamp(6.5rem, 15vw, 9.5rem) var(--margin) clamp(4rem, 10vw, 7rem);
 }
 .legal h1 {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 7vw, 4rem);
-  line-height: 1.02;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2.2rem, 8vw, 3.8rem);
+  line-height: 1;
   letter-spacing: -0.02em;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.9rem;
 }
 .legal .legal-meta {
   font-family: var(--font-mono);
@@ -3299,7 +3304,9 @@ div.todo {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--muted);
-  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+  padding-bottom: clamp(1.5rem, 4vw, 2.4rem);
+  border-bottom: 1px solid var(--border);
 }
 .legal h2 {
   font-family: var(--font-grotesk);

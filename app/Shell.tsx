@@ -28,6 +28,9 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     window.__lenis?.scrollTo(0, { immediate: true });
+    // Tag the route so sub-pages (legal, case studies) can calm the 3D
+    // background and read as clean documents instead of text over a starfield.
+    document.body.dataset.route = pathname === "/" ? "home" : "sub";
     const id = window.setTimeout(() => ScrollTrigger.refresh(), 200);
     return () => window.clearTimeout(id);
   }, [pathname]);
