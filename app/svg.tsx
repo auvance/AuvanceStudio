@@ -197,6 +197,27 @@ export function Key({ className, style, size = 28 }: P) {
   );
 }
 
+// Chevron down — expand/collapse affordance.
+export function ChevronDown({ className, style, size = 24 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 // Check — used in the form success panel.
 export function Check({ className, style, size = 22 }: P) {
   return (

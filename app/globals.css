@@ -2507,50 +2507,56 @@ body.cursor-ready *:focus-visible {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: flex-start;
+  gap: clamp(0.8rem, 2.5vw, 1.6rem);
   width: 100%;
+  text-align: left;
   background: none;
   border: none;
   color: inherit;
   font: inherit;
   cursor: pointer;
-  padding: clamp(1.1rem, 2.8vw, 2rem) clamp(1.8rem, 7vw, 3rem);
+  padding: clamp(1.5rem, 4vw, 2.4rem) 0;
 }
 .svc2-no {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  flex: none;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--text-muted);
 }
 .svc2-name {
+  flex: 1 1 auto;
+  min-width: 0;
   font-family: var(--font-display);
   font-weight: 900;
   text-transform: uppercase;
-  font-size: clamp(1.7rem, 5.5vw, 4.6rem);
+  font-size: clamp(1.4rem, 5vw, 4.6rem);
   letter-spacing: -0.03em;
-  line-height: 1;
+  line-height: 1.02;
   transition: color 0.35s var(--ease-out);
 }
 .svc2-item[data-open="true"] .svc2-name {
   color: var(--accent);
 }
-/* expand affordance — a + that rotates to × when open */
+/* expand affordance — a down-chevron on the right, flips up when open */
 .svc2-toggle {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  flex: none;
+  margin-left: auto;
   color: var(--text-muted);
   transition: transform 0.4s var(--ease-out), color 0.4s var(--ease-out);
-  flex: none;
 }
 .svc2-item[data-open="true"] .svc2-toggle {
-  transform: translateY(-50%) rotate(45deg);
+  transform: rotate(180deg);
   color: var(--accent);
+}
+@media (max-width: 640px) {
+  /* a touch smaller + more breathing room between rows on mobile */
+  .svc2-name {
+    font-size: clamp(1.25rem, 6.2vw, 2.4rem);
+  }
+  .svc2-name-row {
+    padding: clamp(1.5rem, 6vw, 2.2rem) 0;
+  }
 }
 .svc2-detail {
   height: 0;
@@ -2972,14 +2978,18 @@ div.todo {
   align-items: center;
   gap: 10px;
   white-space: nowrap;
-  padding: 9px 12px 9px 14px;
+  padding: 10px 12px 10px 14px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  /* translucent + blurred so it doesn't fully block the hero behind it */
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
   color: var(--text);
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.01em;
+  line-height: 1.5;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
   cursor: pointer;
   animation: crownTipIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -3075,8 +3085,9 @@ div.todo {
 @media (max-width: 600px) {
   .crown-tip {
     white-space: normal;
-    max-width: min(70vw, 240px);
-    line-height: 1.45;
+    /* explicit width so it isn't squeezed to the tiny crown's box */
+    width: min(82vw, 310px);
+    line-height: 1.5;
   }
   .motion-hint {
     flex-wrap: wrap;
@@ -3139,6 +3150,12 @@ div.todo {
    ================================================================ */
 .offer-addons {
   margin-top: clamp(2rem, 4vw, 3rem);
+  /* subtle dark-matte blur so the 3D background lines don't clutter this block */
+  padding: clamp(1.2rem, 3.5vw, 2rem);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--bg) 60%, transparent);
+  backdrop-filter: blur(12px) saturate(115%);
+  -webkit-backdrop-filter: blur(12px) saturate(115%);
 }
 .offer-addons-head {
   font-family: var(--font-mono);

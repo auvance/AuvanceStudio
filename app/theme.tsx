@@ -79,7 +79,7 @@ export function CrownToggle() {
           aria-label="Got it"
         >
           <span className="crown-tip-arrow" aria-hidden />
-          Psst — tap the crown to switch light / dark
+          Psst — the crown is the switch. Tap it any time to flip between light and dark mode.
           <span className="crown-tip-x" aria-hidden>
             ✕
           </span>
