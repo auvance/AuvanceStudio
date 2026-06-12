@@ -1,0 +1,99 @@
+<aside>
+
+Onboarding new clients.
+
+</aside>
+
+<aside>
+
+The onboarding sequence is a step-by-step process designed to provide a seamless and professional experience for new clients. It ensures clarity, organization, and effective communication from the moment they accept your proposal through project completion and beyond. By following this sequence, you'll establish trust, maintain transparency, and lay the foundation for long-term client relationships.
+
+A strong onboarding process sets the tone for the entire client experience.
+
+</aside>
+
+---
+
+<aside>
+
+### **1. Proposal Accepted**
+
+- Send a warm and personalized "Thank You" email & prepare Agreement.
+</aside>
+
+<aside>
+
+### **2. Send Welcome Document + Agreement**
+
+- Share the **Agreement Document** for their review and signature (nothing moves forward until this is signed) (Use Docusign or PandaDoc for E-Signatures)
+- Include a link to the client portal in the welcome document with some information of what they will find inside.
+- Add a personalized video greeting for an extra touch of professionalism and connection.
+</aside>
+
+<aside>
+
+### **3. Client Portal Setup (Notion)**
+
+- Customize the portal to include:
+    - **Project Overview**: Objectives, deliverables, and key milestones.
+    - **Task Tracker**: Ongoing tasks and progress updates.
+    - **Shared Files**: Centralized space for file uploads and downloads.
+    - **Communication Notes**: A log of important discussions and updates.
+    - **Documents Section**: Include your agreement & Invoices.
+- Make the portal custom to the client! Feel free to add anything missing specific to your project / service.
+- Offer a brief tutorial or guide to help the client navigate the portal.
+</aside>
+
+<aside>
+
+### **4. Invoice**
+
+- Notify the client via email with clear payment instructions.
+- Upload the invoice to the client portal under the "Documents" section.
+</aside>
+
+<aside>
+
+### **5. Kickoff Call / Project Alignment Meeting**
+
+- Schedule a kickoff call to:
+    - Align on goals and expectations.
+    - Confirm timelines, deliverables, and any project requirements or dependencies.
+</aside>
+
+<aside>
+
+### **6. Project Execution**
+
+- Begin project execution with frequent updates provided via the client portal.
+- Keep clients informed of milestones and deliverable progress.
+</aside>
+
+<aside>
+
+### **7. Delivery of Final Product**
+
+- Deliver final work through the client portal.
+- Accompany the delivery with an email containing:
+    - Download instructions.
+    - Best practices for using the deliverables.
+</aside>
+
+<aside>
+
+### **8. Offboarding & Testimonial Collection**
+
+- Send a heartfelt thank-you email to wrap up the project.
+- Request feedback or a testimonial with an easy-to-complete form or link.
+- Offer referral incentives to encourage future collaborations.
+</aside>
+
+<aside>
+
+### **9. Continuous Engagement**
+
+- Follow up regularly through emails or calls to check in.
+- Share updates, offer new services, and introduce new ideas or opportunities to keep the relationship active.
+</aside>
+
+4. Onboarding Clients

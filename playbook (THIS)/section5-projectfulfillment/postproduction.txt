@@ -1,0 +1,138 @@
+<aside>
+
+Make your post-production seamlees and stress free.
+
+</aside>
+
+<aside>
+
+By following these steps, you'll save time, stay organized, and provide a polished final product for your clients every time. Everyone has a different Post-Production workflow and you should always do what you feel works best for you. 
+
+</aside>
+
+---
+
+<aside>
+
+### **Post-Production Workflow**
+
+</aside>
+
+### **1. Immediate Post-Shoot Tasks**
+
+- **Back Up Footage Immediately**:
+    - Create at least 2 backups (external hard drive and cloud storage).
+    - Use a reliable folder structure (e.g., *Project Name > RAW Footage > Date/Location*).
+- **Verify Files**:
+    - Check that all footage and audio files have been successfully transferred.
+    - Scrub through files to ensure there are no corrupt or missing clips.
+
+---
+
+<aside>
+
+### **2. Organizing Files**
+
+</aside>
+
+- **Create a Master Folder Structure**:
+    - *Project Name*
+        - RAW Footage
+        - Audio
+        - Pre-Production (storyboards, shot lists, etc.)
+        - Exports
+        - Revisions
+        - Final Deliverables
+
+---
+
+<aside>
+
+### **3. Set Up Your Editing Project**
+
+</aside>
+
+- **Software Setup**:
+    - Create a project folder in your editing software (Premiere Pro, Final Cut, DaVinci, etc.).
+    - Match the project settings to the footage (resolution, frame rate, color space).
+- **Import Files**:
+    - Organize clips into bins or folders within your software (e.g., by scene, location, or type).
+- **Reference Pre-Production Assets**:
+    - Storyboard, shot list, and any client notes for reference.
+
+---
+
+<aside>
+
+### **4. Editing Workflow**
+
+</aside>
+
+- **First Pass**:
+    - Do a rough cut to establish the flow and structure.
+    - Focus on story continuity rather than perfection.
+- **Fine-Tuning**:
+    - Refine cuts, transitions, and pacing.
+    - Sync music and sound effects with visuals.
+- **Color Correction and Grading**:
+    - Ensure consistent exposure and white balance across clips.
+    - Apply creative color grading to match the desired mood.
+- **Audio Mixing**:
+    - Level out dialogue, music, and sound effects.
+    - Use noise reduction or EQ adjustments as needed.
+
+---
+
+<aside>
+
+### **5. Quality Control**
+
+</aside>
+
+- **Review the Edit**:
+    - Watch the video from start to finish without distractions.
+    - Check for continuity, glitches, and missing elements.
+- **Client Revisions**:
+    - Create a checklist for feedback to ensure all revisions are addressed.
+
+---
+
+<aside>
+
+### **6. Deliverables**
+
+</aside>
+
+- **Export Settings**:
+    - Export in the required resolution, frame rate, and codec (e.g., H.264 for web).
+- **Branded Presentation**:
+    - Use your client portal for delivery (Google Drive/dropbox link).
+    - Include a short message or guide on how to use the files (e.g., best platform for upload).
+
+---
+
+<aside>
+
+### **7. Backup and Archive**
+
+</aside>
+
+- **Final Backup**:
+    - Save the final project files, raw footage, and deliverables in a dedicated folder.
+- **Cloud Storage**:
+    - Use cloud services (e.g., Google Drive, Dropbox) for long-term storage.
+
+---
+
+<aside>
+
+### **Tips for Seamless Workflow**
+
+</aside>
+
+1. **Stay Organized**: A well-organized file structure saves hours during editing.
+2. **Save Regularly**: Use autosave features and manual saves frequently.
+3. **Refer to Pre-Production Planning**: Stay aligned with the client’s vision by regularly revisiting shot lists, notes, and goals.
+4. **Use Templates**: Create templates for export settings, title cards, and branding elements to save time.
+
+5. Project Fulfillment

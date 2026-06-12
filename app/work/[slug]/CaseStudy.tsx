@@ -100,12 +100,9 @@ export default function CaseStudy({ work }: { work: Work }) {
             A site the team is finally proud to send — and that quietly does its job every day.
           </p>
         </div>
-        <div className="cs-gallery">
-          {work.gallery.map((src, i) => (
-            <div key={i} className="g" style={{ backgroundImage: `url('${src}')` }} />
-          ))}
-        </div>
       </section>
+
+      <CloserLook work={work} />
 
       <section className="section curtain-end">
         <div className="cs-next">
@@ -131,5 +128,44 @@ export default function CaseStudy({ work }: { work: Work }) {
         </div>
       </section>
     </article>
+  );
+}
+
+/* "A closer look" — a bento image wall of the project's shots, shown at the
+   very bottom of the case study. Real images come from work.gallery; the
+   remaining tiles are red placeholders to drop more screenshots into. */
+function CloserLook({ work }: { work: Work }) {
+  const head = useReveal<HTMLHeadingElement>({ y: 30 });
+  // bento layout — fill from work.gallery, pad the rest with "add image" tiles.
+  const spans = ["bento-big", "bento-tall", "bento-wide", "bento-sm", "bento-sm", "bento-wide"];
+  const labels = ["Full site", "Mobile view", "Key section", "Detail", "Detail", "Brand close-up"];
+  const tiles = spans.map((span, i) => ({
+    span,
+    label: labels[i],
+    img: work.gallery[i] || "",
+  }));
+  return (
+    <section className="section cs-closer" style={{ paddingTop: 0 }}>
+      <div className="spine-label">A closer look</div>
+      <h2 ref={head} className="bento-h">
+        A closer look.
+      </h2>
+      <div className="bento">
+        {tiles.map((t, i) =>
+          t.img ? (
+            <div key={i} className={`bento-tile ${t.span}`} style={{ backgroundImage: `url('${t.img}')` }}>
+              <span className="bento-label">{t.label}</span>
+            </div>
+          ) : (
+            <div key={i} className={`bento-tile bento-tile--empty ${t.span}`}>
+              <Plus size={22} />
+              <span className="todo" role="note">
+                ⚠ Add image — {t.label}
+              </span>
+            </div>
+          )
+        )}
+      </div>
+    </section>
   );
 }

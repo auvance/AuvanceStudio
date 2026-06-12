@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import { prefersReducedMotion } from "./motion";
 import { MotionToggle } from "./theme";
 
-const TITLE = "Auvance.";
+const TITLE = "auvANcE.";
 
 /** On the home page, render a bare #hash anchor so the global SmoothScroll
  *  handler catches it and eases to the section; elsewhere, route home first. */
@@ -60,8 +60,8 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer-head">
         <div className="footer-mark" aria-hidden>
-          <img className="crown-white" src="/crown-white.svg" alt="" />
-          <img className="crown-black" src="/crown-black.svg" alt="" />
+          <img className="crown-white" src="/crown-white.svg" alt="" width="68" height="54" />
+          <img className="crown-black" src="/crown-black.svg" alt="" width="68" height="54" />
         </div>
         <div>
           <h2 className="footer-title" ref={titleRef} aria-label={TITLE}>

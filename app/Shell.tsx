@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SmoothScroll from "./SmoothScroll";
-import ThreeBackground from "./ThreeBackground";
+// Defer the heavy three.js background out of the initial bundle (LCP / main-thread).
+const ThreeBackground = dynamic(() => import("./ThreeBackground"), { ssr: false });
 import Grain from "./Grain";
 import Cursor from "./Cursor";
 import Nav from "./Nav";

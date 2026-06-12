@@ -66,8 +66,8 @@ export function CrownToggle() {
           toggleTheme();
         }}
       >
-        <img className="crown-white" src="/crown-white.svg" alt="Auvance crown" />
-        <img className="crown-black" src="/crown-black.svg" alt="Auvance crown" />
+        <img className="crown-white" src="/crown-white.svg" alt="Auvance crown" width="68" height="54" />
+        <img className="crown-black" src="/crown-black.svg" alt="Auvance crown" width="68" height="54" />
         <span className="crown-hint">◐ Theme</span>
       </button>
 

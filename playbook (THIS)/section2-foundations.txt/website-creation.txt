@@ -1,0 +1,163 @@
+<aside>
+
+Your website is your digital storefront. Is it the most important thing in your business? No. But it’s still essential. 
+
+</aside>
+
+<aside>
+
+Having a professional website isn’t just about showcasing your work; it’s about showing potential clients that you’re serious, credible, and prepared to deliver results. It’s become an industry standard—and a well-crafted website can set you apart from competitors.
+
+This isn’t a step-by-step tutorial on building a website (there are countless YouTube videos for that), but I’ll cover the essentials you need to know to get started confidently.
+
+</aside>
+
+---
+
+<aside>
+
+### Getting Started
+
+</aside>
+
+1. **Buy a Domain**
+    - Your domain is your online address. Keep it professional and straightforward.
+    - GoDaddy is my go-to for purchasing domains.
+2. **Choose a Website Builder**
+    - Select a platform that matches your technical skill level and aesthetic preferences (see my recommendations below).
+3. **Build a Site that Reflects Your Brand**
+    - Showcase your services, expertise, and niche. Your website should tell potential clients who you are and why they should hire you.
+
+---
+
+<aside>
+
+### **Website Checklist**
+
+</aside>
+
+Here’s a checklist to ensure your website is polished and effective:
+
+- [ ]  **Clear Landing Page**: Clearly state who you are, what you do, and how you can help.
+- [ ]  **About Us Page**: Share your story and what makes you/your team unique.
+- [ ]  **Simple, Clean Layout**: Prioritize seamless navigation and readability (no over-the-top effects).
+- [ ]  **Value Proposition**: Highlight what sets you apart from competitors.
+- [ ]  **Mobile Optimization**: Ensure your site looks and functions perfectly on mobile devices (this is more important than the desktop version!).
+- [ ]  **Client Testimonials**: Add trust-building reviews or case studies.
+- [ ]  **Portfolio Page/Case Studies**: Display your best work in a way that’s easy to navigate.
+- [ ]  **Contact Page**: Include a form, email, or booking calendar (like Calendly) for easy client communication.
+- [ ]  **SEO Optimization**: Verify your site with Google Search Console so it shows up in search results.
+
+---
+
+<aside>
+
+### **Website Builder Recommendations**
+
+</aside>
+
+The right website builder depends on your preferences and needs. Here are my top picks:
+
+- **Squarespace**: My personal favorite—easy to use, clean templates, and simple to update.
+- **Framer**: Offers great customization but can be a bit more complex.
+- **Adobe Portfolio**: Great for showcasing creative work but limited in functionality.
+- **Wix**: A versatile and user-friendly builder.
+- **Elementor**: A robust WordPress builder for those who want complete control.
+
+---
+
+<aside>
+
+### Pro Tip
+
+</aside>
+
+If you see a website you love, find out what builder they used. Use this tool: CMS Detector.
+
+---
+
+<aside>
+
+### **Website Inspiration**
+
+</aside>
+
+Looking for ideas? Here are some websites to inspire you:
+
+- LC Media Studio
+- Iwar Woolschot
+- Voyager Visual Travel
+- Dune Media House
+- LY Visuals
+
+---
+
+<aside>
+
+### **SEO Basics for Your Website**
+
+</aside>
+
+Search Engine Optimization (SEO) is essential for making sure your website gets seen by potential clients. While SEO strategies can vary depending on the website builder you choose, here are some foundational tips to get started:
+
+**1. Use Keywords Strategically**
+
+- Identify the keywords potential clients might search for (e.g., “Brand Designer in [Your Location]” or “Photographer in [Your Location]”).
+- Include these keywords naturally in your page titles, meta descriptions, and body text.
+
+**2. Optimize Page Titles and Meta Descriptions**
+
+- Every page should have a unique and descriptive title (e.g., “Creative Video Production Services | Your Business Name”).
+- Write clear meta descriptions for each page to briefly explain what it’s about and include a call to action.
+
+**3. Image Optimization**
+
+- Add descriptive alt text to every image, incorporating relevant keywords.
+
+**4. Build Internal and External Links**
+
+- Link to your own content within the site (e.g., “Check out our portfolio here”).
+- Include external links to credible sources where appropriate.
+
+**5. Ensure Mobile Optimization**
+
+- Google prioritizes mobile-friendly websites. Test your site on multiple devices to ensure a seamless experience.
+
+**6. Improve Page Load Speed**
+
+- Use Google PageSpeed Insights to check and optimize loading times.
+- Avoid large, uncompressed media files and excessive animations.
+
+**7. Create an SEO-Friendly URL Structure**
+
+- Keep URLs short, descriptive, and clean (e.g., “yourwebsite.com/services” rather than “yourwebsite.com/p1234-services-long-title”).
+
+**8. Submit Your Site to Google**
+
+- Use Google Search Console to submit your website and ensure it’s indexed.
+
+**9. Add a Sitemap**
+
+- Generate a sitemap to help search engines understand the structure of your site. Many website builders do this automatically or provide plugins to help.
+
+**💡 Pro Tip:** SEO capabilities can differ across website builders like Squarespace, Wix, or WordPress. Make sure you explore specific tutorials and guides for the platform you choose to maximize results. For example:
+
+- Squarespace has built-in SEO settings and guides you can follow step-by-step.
+- WordPress offers plugins like Yoast SEO for deeper optimization.
+- Wix provides an SEO Wizard to simplify the process.
+
+Investing a little time in understanding and implementing SEO will make a big difference in how easily potential clients can discover your services.
+
+---
+
+<aside>
+
+### **Update and Maintain Your Site**
+
+</aside>
+
+- Regularly update content (like testimonials or portfolio items).
+- Check for broken links.
+- Monitor SEO performance.
+- Refresh the design every 1-2 years to keep it modern.
+

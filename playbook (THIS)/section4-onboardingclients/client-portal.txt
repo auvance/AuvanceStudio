@@ -1,0 +1,76 @@
+<aside>
+
+Everything for your clients, in one place.
+
+</aside>
+
+<aside>
+
+The **Client Portal** is an essential tool for delivering a seamless and luxury experience to your clients. Built on Notion, this portal serves as a centralized hub where all project-related information, documents, and communication can be stored and accessed effortlessly.
+
+</aside>
+
+---
+
+<aside>
+
+### Customization
+
+</aside>
+
+The **Client Portal** is not just about organization—it's an opportunity to showcase your brand and create a personalized experience for your client.
+
+**Branding Your Portal:**
+
+- Add your **logo and** brand colors to make the portal align with your business identity.
+- Customize the layout to match your style while maintaining the clean and professional aesthetic that makes a great first impression.
+
+**Personalizing for the Client:**
+
+- Include **images or visuals** from the client’s business, such as photos of their property, logo, or products.
+- Tailor the **project overview** to reflect their specific goals and key deliverables.
+- Name the portal uniquely, e.g., "[Client Name] Project Hub," to create a sense of exclusivity and collaboration.
+
+---
+
+<aside>
+
+### How to Use and Duplicate the Notion Client Portal
+
+</aside>
+
+Follow these steps to access and duplicate the Notion Client Portal template into your own Notion workspace:
+
+1. **Open the Template Link**
+    - Click on the provided Notion link to open the template. This will open the portal in your web browser or Notion app.
+2. **Log In to Notion**
+    - Make sure you are logged into your Notion account. If you don’t have one, you can sign up for free at notion.so.
+3. **Duplicate the Template**
+    - In the top-right corner of the page, click the "**Duplicate**" button.
+    - Select the workspace where you'd like to save the duplicated template.
+4. **Customize the Portal**
+    - Once the template is in your workspace, edit it to match your brand by adding your logo, brand colors, and fonts.
+    - Update the project overview, deliverables, and client details to reflect the specific project.
+5. **Share with Your Client**
+    - When the portal is ready, click "**Share**" in the top-right corner.
+    - Toggle "**Share to Web**" and copy the link to send to your client. You can also manage permissions to ensure they can view (but not edit) the portal.
+
+---
+
+<aside>
+
+### [The Client Portal Template]
+
+Client Name - Content Portal 
+
+</aside>
+
+<aside>
+
+### [The Client Portal Template V2]
+
+Client Portal V2  
+
+</aside>
+
+4. Onboarding Clients   

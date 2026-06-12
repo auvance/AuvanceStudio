@@ -1,0 +1,114 @@
+<aside>
+
+Make the billing process seamless and organized.
+
+</aside>
+
+<aside>
+
+Invoices are an essential part of running a professional creative business, ensuring clear communication of payment details and maintaining client trust. While many invoicing platforms like Stripe, QuickBooks, and PayPal streamline the process, a custom-branded invoice template can elevate your client experience.
+
+By sending a clean, professionally branded invoice (which can also be uploaded to the dedicated "Invoices" section in the client portal), you ensure your client feels organized and valued.
+
+A clean billing experience reinforces your positioning just as much as your work does.
+
+</aside>
+
+---
+
+<aside>
+
+### **Why Use a Branded Invoice Template?**
+
+</aside>
+
+**Professionalism:** A branded invoice reinforces your identity as a premium service provider.
+
+**Organization:** Clients can easily keep all documents in one place, simplifying record-keeping.
+
+**Trust:** A well-crafted invoice shows attention to detail, making clients feel secure in their transactions.
+
+---
+
+<aside>
+
+### **Important Notes**
+
+</aside>
+
+**Country-Specific Requirements:**
+
+Invoice requirements can vary depending on your location. Be sure to include all necessary fields, such as:
+
+- Invoice number.
+- Date of issuance.
+- Client details (name, business name, address).
+- Your business details (name, address, tax ID).
+- Description of services provided.
+- Total amount (with and without taxes, if applicable).
+- Payment terms and due dates.
+- Governing law (if required).
+
+**Use Online Invoicing Tools When Needed:**
+
+Platforms like Stripe, Wave, and QuickBooks can help you manage payments more easily. However, sending a branded invoice alongside these tools provides an extra touch of professionalism. You can include links to these platforms in your branded invoice.
+
+---
+
+<aside>
+
+### **How to Use the Invoice Template**
+
+</aside>
+
+1. **Customize for Your Brand**
+    - Add your business logo, brand colors, and contact information.
+2. **Fill Out Service Details**
+    - Clearly list the services provided, including project descriptions, dates, and individual costs.
+    - Add any relevant taxes or fees and calculate the final total.
+3. **Upload to the Client Portal**
+    - Save your invoice as a PDF and upload it to the "Documents" section in the client portal for easy access.
+4. **Send the Invoice**
+    - Notify the client via email that their invoice is ready.
+
+---
+
+<aside>
+
+### **Example Email Template**
+
+Subject: Your Invoice for [Project Name]
+
+Hi [Client Name],
+
+Attached is your invoice for [Project Name]. For your convenience, it’s also been uploaded to your client portal in the "Invoices" section.
+
+Here’s a summary:
+
+- **Project:** [Project Name]
+- **Amount Due:** [Total Amount]
+- **Due Date:** [Payment Deadline]
+
+Click here to access your invoice directly. (Google drive link from Invoice section in your client portal).
+
+If you have any questions, feel free to reach out. Thank you again for your trust—I’m looking forward to continuing this project together.
+
+Best regards,
+
+[Your Name]
+
+This approach ensures you’re delivering invoices in a way that aligns with your high-ticket services while keeping clients informed and satisfied.
+
+</aside>
+
+---
+
+<aside>
+
+### [The Invoice Template]
+
+https://www.canva.com/design/DAGcRPY742E/564P4N4JzE2mwcRi3Yj0FA/view?utm_content=DAGcRPY742E&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink&mode=preview
+
+</aside>
+
+5. Project Fulfillment

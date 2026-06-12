@@ -39,28 +39,28 @@ export const works: Work[] = [
     outcome:
       "A presence the community is proud to share. Prayer times and events are now front-and-centre, donations are one tap away, and the mosque finally looks as established online as it is in person.",
     stat: { value: "1", label: "Calm home for the whole community" },
-    gallery: ["/work/abubakr-siddiq.png", "/work/abwab-ventures.png"],
-    liveUrl: "https://abubakrsiddiq.webflow.io",
+    gallery: ["/work/abubakr-siddiq.png"],
+    liveUrl: "https://asicbrentwood.ca",
   },
   {
-    slug: "abwab-ventures",
-    name: "Abwab Ventures",
-    client: "Abwab Ventures",
-    tag: "Lead Forms · More Sign-ups",
+    slug: "tendycutz",
+    name: "TendyCutz",
+    client: "TendyCutz Lawn & Yard Care",
+    tag: "Website · More Booked Jobs",
     year: "2025",
-    services: ["Web Design", "Conversion", "Lead Forms"],
-    image: "/work/abwab-ventures.png",
+    services: ["Web Design", "Development", "Local SEO"],
+    image: "/work/tendycutz.png",
     summary:
-      "A sharper, more credible site for a ventures firm — engineered around one job: turning visitors into qualified conversations.",
+      "A trustworthy home base for a solo lawn-care operator — built to turn neighbours into booked jobs and recurring Care Club clients.",
     challenge:
-      "Abwab had momentum but a site that undersold it. The messaging buried what they actually do, and the contact path was an afterthought — so good-fit leads slipped away.",
+      "A one-person yard-care business in Port Coquitlam running entirely on word of mouth. No website meant no easy way for neighbours to see the services, the proof, or how to book — and recurring work was left on the table.",
     approach:
-      "We rebuilt the narrative top-down: a confident hero, proof early, and a frictionless enquiry form placed exactly where intent peaks. Every section ends with a clear next step, and the whole thing loads fast on the phones most visitors use.",
+      "We built the site around the two things that win local jobs: proof and a frictionless next step. Real before-and-after work and neighbour reviews up front, the personal 'just me — no random crews' angle, clear services, and a quote/booking path that nudges one-off jobs into the Weekly Care Club.",
     outcome:
-      "A site that finally matches the ambition of the team behind it — more enquiries, better-qualified, and a brand that reads as serious from the first scroll.",
-    stat: { value: "↑", label: "More qualified sign-ups" },
-    gallery: ["/work/abwab-ventures.png", "/work/abubakr-siddiq.png"],
-    liveUrl: "https://abwab.ca",
+      "A credible site he can send every lead to — easier to book, easier to trust, and engineered to convert one-time cleanups into recurring monthly clients.",
+    stat: { value: "↑", label: "More booked jobs & recurring clients" },
+    gallery: ["/work/tendycutz.png"],
+    liveUrl: "https://tendycutz.ca",
   },
   {
     slug: "student-software-association",

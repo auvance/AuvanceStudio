@@ -197,6 +197,29 @@ export function Key({ className, style, size = 28 }: P) {
   );
 }
 
+// Discovery — a compass (we get our bearings on your business first).
+export function Compass({ className, style, size = 28 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="12" cy="12" r="9.2" />
+      <path d="m15.5 8.5-2 5-5 2 2-5 5-2Z" />
+      <circle cx="12" cy="12" r="0.6" fill="currentColor" />
+    </svg>
+  );
+}
+
 // Chevron down — expand/collapse affordance.
 export function ChevronDown({ className, style, size = 24 }: P) {
   return (

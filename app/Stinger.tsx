@@ -54,7 +54,7 @@ export function StingerProvider({ children }: { children: React.ReactNode }) {
       {children}
       <div ref={overlay} className="stinger" aria-hidden style={{ visibility: "hidden" }}>
         <div ref={inner} className="stinger-inner">
-          <img src="/crown-white.svg" alt="" className="stinger-crown" />
+          <img src="/crown-white.svg" alt="" className="stinger-crown" width="68" height="54" />
           <div className="stinger-word">AUVANCE</div>
           <div className="stinger-tag">Built to Convert</div>
         </div>

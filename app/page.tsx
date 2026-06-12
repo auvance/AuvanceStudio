@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { gsap } from "gsap";
 import {
   useReveal,
@@ -21,7 +20,7 @@ import {
   Globe,
   ArrowUpRight,
   Dot,
-  Search,
+  Compass,
   PenNib,
   Code,
   Key,
@@ -98,8 +97,8 @@ function Hero() {
 
       <div className="hero-foot">
         <p className="body-lg" style={{ maxWidth: "460px" }}>
-          Custom websites for local businesses — designed to turn visitors into
-          paying customers. You own everything. Fixed price. No lock-in.
+          Custom sites for local businesses that turn &ldquo;just looking&rdquo; into booked work.
+          You own all of it — one flat price, no lock-in, no surprises.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", alignItems: "flex-start" }}>
           <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
@@ -288,15 +287,21 @@ function Todo({ children, block }: { children: React.ReactNode; block?: boolean 
 
 /* --- ABOUT / founder (id=about) --- */
 function About() {
-  const ref = useReveal<HTMLDivElement>({ y: 30 });
+  const photo = useParallax<HTMLImageElement>(0.07);
+  const hl = useScrollHighlight<HTMLDivElement>();
   const [photoOk, setPhotoOk] = useState(true);
+  const paras = [
+    "You won't get handed off to an account manager or buried in a ticket queue. It's me — I design it, I build it, and I'm the one who texts you back.",
+    "I'm early in Auvance's run, which is the whole reason you get a founding rate and my full attention — not a slot in a queue. I only put my name on work I'd stand behind.",
+  ];
   return (
     <section id="about" className="section">
       <div className="spine-label">Who you work with</div>
-      <div ref={ref} className="about-grid">
+      <div className="about-grid">
         <div className="about-photo">
           {photoOk ? (
             <img
+              ref={photo}
               className="about-photo-img"
               src="/PortraitOne.jpeg"
               alt="Aakif — founder of Auvance"
@@ -306,18 +311,19 @@ function About() {
             <Todo block>Add your portrait — save it as public/portrait.jpg</Todo>
           )}
         </div>
-        <div>
-          <h2 className="h2" style={{ marginBottom: "1.2rem" }}>
-            A real person — not an agency.
-          </h2>
-          <p className="body-lg" style={{ marginBottom: "1rem" }}>
-            I&apos;m a Vancouver-based web designer running Auvance solo. You work directly with me —
-            no account managers, no ticket queue. Text me and I answer.
-          </p>
-          <p className="body-lg">
-            I&apos;m early in my studio&apos;s journey, so you get my full attention at a
-            founding-client rate — and a site I&apos;ll stand behind.
-          </p>
+        <div className="about-copy">
+          <h2 className="about-h">A real person — not an agency.</h2>
+          <div ref={hl} className="about-sub">
+            {paras.map((p, pi) => (
+              <p key={pi}>
+                {p.split(" ").map((w, i) => (
+                  <span className="hl-word" key={i}>
+                    {w}{" "}
+                  </span>
+                ))}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -391,7 +397,7 @@ function Testimonials() {
   const slots: [string, string][] = [
     ["Abu Bakr Siddiq Mosque", "Add a 1–2 line testimonial + a real outcome (sign-ups, calls, etc.)"],
     ["Student Software Association", "Add a 1–2 line testimonial + a real outcome"],
-    ["Abwab Ventures", "Add a testimonial once the project is finished"],
+    ["TendyCutz", "Pull a 1–2 line neighbour review from the site + a real outcome"],
   ];
   return (
     <section id="testimonials" className="section">
@@ -794,7 +800,7 @@ function ProcCard({
   offset: string;
 }) {
   const ref = useParallax<HTMLDivElement>(speed);
-  const Icon = [Search, PenNib, Code, Key][i] ?? Asterisk;
+  const Icon = [Compass, PenNib, Code, Key][i] ?? Asterisk;
   return (
     <div className="proc-card" style={{ marginTop: offset }}>
       <div ref={ref} className="proc-card-inner">
@@ -809,21 +815,50 @@ function ProcCard({
   );
 }
 
-/* --- WORK RAIL (horizontal scroll) --- id=work --- */
+/* --- WORK GALLERY (skewed, scroll-driven, expanding panels) --- id=work --- */
 function WorkRail() {
   const rail = useHorizontalScroll<HTMLElement>();
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-velocity skew: the panels lean into the scroll direction, easing
+  // back to flat when idle. Desktop + motion only; never touches layout.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || prefersReducedMotion()) return;
+    if (!window.matchMedia("(min-width: 901px)").matches) return;
+    const imgs = track.querySelectorAll<HTMLElement>(".gal-img");
+    if (!imgs.length) return;
+    const setSkew = gsap.quickSetter(imgs, "skewX", "deg");
+    let last = window.scrollY;
+    let target = 0;
+    let cur = 0;
+    const tick = () => {
+      const y = window.scrollY;
+      target = gsap.utils.clamp(-8, 8, (y - last) * 0.5);
+      last = y;
+      cur += (target - cur) * 0.12;
+      target *= 0.82; // decay toward flat when scrolling stops
+      setSkew(cur);
+    };
+    gsap.ticker.add(tick);
+    return () => gsap.ticker.remove(tick);
+  }, []);
+
   return (
     <section id="work" className="work-rail" ref={rail}>
       <div className="work-rail-sticky">
         <div className="work-rail-head">
           <div className="spine-label">04 — Selected Work</div>
           <div className="label" style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-            Scroll to explore <ArrowUpRight size={14} />
+            Scroll to explore — hover to open <ArrowUpRight size={14} />
           </div>
         </div>
-        <div className="h-track">
+        <div className="h-track gal-track" ref={trackRef}>
           {works.map((w, i) => (
-            <WorkSlide key={w.slug} w={w} i={i} total={works.length} />
+            <GalItem key={w.slug} w={w} i={i} total={works.length} />
+          ))}
+          {GALLERY_PLACEHOLDERS.map((p, i) => (
+            <GalPlaceholder key={`ph-${i}`} label={p} />
           ))}
           <a href="#contact" className="work-end" data-hover>
             <div className="spine-label">Next</div>
@@ -841,75 +876,63 @@ function WorkRail() {
   );
 }
 
-function WorkSlide({ w, i, total }: { w: (typeof works)[number]; i: number; total: number }) {
+function GalItem({ w, i, total }: { w: (typeof works)[number]; i: number; total: number }) {
   const go = useStinger();
   const href = `/work/${w.slug}`;
-  const cardRef = useRef<HTMLAnchorElement>(null);
-  const stickerRef = useRef<HTMLSpanElement>(null);
-
-  // "View project" sticker that pops in and follows the cursor (desktop only).
-  useEffect(() => {
-    const card = cardRef.current;
-    const sticker = stickerRef.current;
-    if (!card || !sticker) return;
-    if (!window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 901px)").matches)
-      return;
-    gsap.set(sticker, { xPercent: -50, yPercent: -50, scale: 0.5, rotation: -5, autoAlpha: 0 });
-    const xTo = gsap.quickTo(sticker, "x", { duration: 0.3, ease: "power3" });
-    const yTo = gsap.quickTo(sticker, "y", { duration: 0.3, ease: "power3" });
-    const move = (e: MouseEvent) => {
-      const r = card.getBoundingClientRect();
-      xTo(e.clientX - r.left);
-      yTo(e.clientY - r.top);
-    };
-    const enter = () => gsap.to(sticker, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" });
-    const leave = () => gsap.to(sticker, { autoAlpha: 0, scale: 0.5, duration: 0.25, ease: "power2.in" });
-    card.addEventListener("mousemove", move);
-    card.addEventListener("mouseenter", enter);
-    card.addEventListener("mouseleave", leave);
-    return () => {
-      card.removeEventListener("mousemove", move);
-      card.removeEventListener("mouseenter", enter);
-      card.removeEventListener("mouseleave", leave);
-    };
-  }, []);
-
   return (
-    <Link
-      ref={cardRef}
-      href={href}
-      onClick={(e) => {
-        e.preventDefault();
-        go(href);
-      }}
-      className="work-slide"
+    <div
+      className="gal-item"
       data-hover
+      role="link"
+      tabIndex={0}
+      aria-label={`View ${w.name} case study`}
+      onClick={() => go(href)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          go(href);
+        }
+      }}
     >
-      <div className="ws-media">
-        <div className="ws-media-inner" style={{ backgroundImage: `url('${w.image}')` }} />
+      <div className="gal-img" style={{ backgroundImage: `url('${w.image}')` }} />
+      <div className="gal-meta">
+        <span className="gal-no">
+          {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </span>
+        <span className="gal-name">
+          {w.name} <ArrowUpRight size={20} />
+        </span>
+        <span className="gal-tag">{w.tag}</span>
+        {w.liveUrl && (
+          <a
+            className="gal-live"
+            href={w.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            data-hover
+            onClick={(e) => e.stopPropagation()}
+          >
+            View website <ArrowUpRight size={13} />
+          </a>
+        )}
       </div>
-      <div>
-        <div className="ws-counter">
-          <Asterisk size={12} /> {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-        </div>
-        <div className="ws-name">
-          {w.name} <ArrowUpRight size={24} />
-        </div>
-        <p className="body-lg">{w.summary}</p>
-        <div className="ws-stat" style={{ display: "flex", flexDirection: "column", gap: "0.6rem", alignItems: "flex-start" }}>
-          <Todo>Add a real result metric (e.g. ↑ enquiries, calls)</Todo>
-          {w.slug === "abu-bakr-siddiq" && (
-            <Todo>Rehost on a real domain — currently a free webflow.io subdomain</Todo>
-          )}
-        </div>
-        <div className="label" style={{ marginTop: "1.5rem" }}>
-          {w.services.join(" · ")} — {w.year}
-        </div>
+    </div>
+  );
+}
+
+// Empty slots in the gallery for upcoming work — drop a real screenshot into
+// /public/work and wire it into works.ts to turn one of these into a live panel.
+const GALLERY_PLACEHOLDERS = ["Your project here", "Next build", "Coming soon"];
+
+function GalPlaceholder({ label }: { label: string }) {
+  return (
+    <div className="gal-item gal-item--empty" aria-hidden>
+      <div className="gal-ph">
+        <Plus size={26} />
+        <span className="gal-ph-label">{label}</span>
+        <Todo>Add a project image</Todo>
       </div>
-      <span ref={stickerRef} className="work-sticker" aria-hidden>
-        View project <ArrowUpRight size={13} />
-      </span>
-    </Link>
+    </div>
   );
 }
 
