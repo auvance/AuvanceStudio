@@ -262,6 +262,27 @@ export function Check({ className, style, size = 22 }: P) {
   );
 }
 
+// Project mark — the 8-ray asterisk the founder supplied (Project-Symbol).
+export function ProjectSymbol({ className, style, size = 14 }: P) {
+  return (
+    <svg
+      className={className}
+      style={style}
+      width={size}
+      height={size}
+      viewBox="0 0 12 12"
+      fill="none"
+      aria-hidden
+    >
+      <path
+        d="M6.23913 0.5V6M6.23913 11.5V6M6.23913 6H0.5M6.23913 6H11.5M6.23913 6L9.58696 2.33333M6.23913 6L2.41304 2.33333M6.23913 6L2.41304 9.66667M6.23913 6L9.58696 9.66667"
+        stroke="currentColor"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 /* On-brand gradient placeholders for the service hover-previews
    (no image assets needed; swap for real shots anytime). */
 export function gradientPreview(i: number, label: string) {

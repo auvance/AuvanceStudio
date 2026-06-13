@@ -8,7 +8,6 @@ import {
   useCountUp,
   useScrollHighlight,
   useTilt,
-  useHorizontalScroll,
 } from "./animations";
 import { works } from "./works";
 import { useStinger } from "./Stinger";
@@ -25,6 +24,7 @@ import {
   Key,
   Check,
   ChevronDown,
+  ProjectSymbol,
   gradientPreview,
 } from "./svg";
 
@@ -278,6 +278,7 @@ function Todo({ children, block }: { children: React.ReactNode; block?: boolean 
 function About() {
   const photo = useParallax<HTMLImageElement>(0.07);
   const hl = useScrollHighlight<HTMLDivElement>();
+  const head = useReveal<HTMLHeadingElement>({ y: 28 });
   const [photoOk, setPhotoOk] = useState(true);
   const paras = [
     "You won't get handed off to an account manager or buried in a ticket queue. It's me — I design it, I build it, and I'm the one who texts you back.",
@@ -301,7 +302,9 @@ function About() {
           )}
         </div>
         <div className="about-copy">
-          <h2 className="about-h">A real person — not an agency.</h2>
+          <h2 ref={head} className="about-h2">
+            hey there, I&apos;m Aakif!
+          </h2>
           <div ref={hl} className="about-sub">
             {paras.map((p, pi) => (
               <p key={pi}>
@@ -313,9 +316,53 @@ function About() {
               </p>
             ))}
           </div>
+          <div className="about-metrics">
+            <Metric value={3} suffix="+" unit="years" label="Industry Experience" />
+            <Metric value={20} label="Projects Completed" />
+            <MetricStatic symbol="1:1" label="One Man Expertise" />
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+/* Founder metric — big Monument number (count-up) + gray label underneath. */
+function Metric({
+  value,
+  suffix,
+  unit,
+  label,
+}: {
+  value: number;
+  suffix?: string;
+  unit?: string;
+  label: string;
+}) {
+  const num = useCountUp<HTMLSpanElement>(value, { suffix });
+  const wrap = useReveal<HTMLDivElement>({ y: 22 });
+  return (
+    <div ref={wrap} className="metric">
+      <div className="metric-top">
+        <span ref={num} className="metric-num">
+          0{suffix}
+        </span>
+        {unit ? <span className="metric-unit">{unit}</span> : null}
+      </div>
+      <div className="metric-label">{label}</div>
+    </div>
+  );
+}
+
+function MetricStatic({ symbol, label }: { symbol: string; label: string }) {
+  const wrap = useReveal<HTMLDivElement>({ y: 22 });
+  return (
+    <div ref={wrap} className="metric">
+      <div className="metric-top">
+        <span className="metric-num">{symbol}</span>
+      </div>
+      <div className="metric-label">{label}</div>
+    </div>
   );
 }
 
@@ -804,73 +851,42 @@ function ProcCard({
   );
 }
 
-/* --- WORK GALLERY (skewed, scroll-driven, expanding panels) --- id=work --- */
+/* --- SELECTED WORKS (staggered two-column grid) --- id=work --- */
 function WorkRail() {
-  const rail = useHorizontalScroll<HTMLElement>();
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-velocity skew: the panels lean into the scroll direction, easing
-  // back to flat when idle. Desktop + motion only; never touches layout.
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track || prefersReducedMotion()) return;
-    if (!window.matchMedia("(min-width: 901px)").matches) return;
-    const imgs = track.querySelectorAll<HTMLElement>(".gal-img");
-    if (!imgs.length) return;
-    const setSkew = gsap.quickSetter(imgs, "skewX", "deg");
-    let last = window.scrollY;
-    let target = 0;
-    let cur = 0;
-    const tick = () => {
-      const y = window.scrollY;
-      target = gsap.utils.clamp(-8, 8, (y - last) * 0.5);
-      last = y;
-      cur += (target - cur) * 0.12;
-      target *= 0.82; // decay toward flat when scrolling stops
-      setSkew(cur);
-    };
-    gsap.ticker.add(tick);
-    return () => gsap.ticker.remove(tick);
-  }, []);
-
+  const head = useReveal<HTMLHeadingElement>({ y: 30 });
   return (
-    <section id="work" className="work-rail" ref={rail}>
-      <div className="work-rail-sticky">
-        <div className="work-rail-head">
-          <div className="spine-label">04 — Selected Work</div>
-          <div className="label" style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-            Scroll to explore — hover to open <ArrowUpRight size={14} />
-          </div>
+    <section id="work" className="section works2">
+      <div className="works2-head">
+        <h2 ref={head} className="works2-title">
+          Selected
+          <br />
+          Works
+        </h2>
+        <div className="works2-cue label">
+          Selected projects <span className="slash">/</span> tap to open the case study
         </div>
-        <div className="h-track gal-track" ref={trackRef}>
-          {works.map((w, i) => (
-            <GalItem key={w.slug} w={w} i={i} total={works.length} />
-          ))}
-          {GALLERY_PLACEHOLDERS.map((p, i) => (
-            <GalPlaceholder key={`ph-${i}`} label={p} />
-          ))}
-          <a href="#contact" className="work-end" data-hover>
-            <div className="spine-label">Next</div>
-            <h3 className="h1">Have a project in mind?</h3>
-            <p className="body-lg" style={{ maxWidth: 420 }}>
-              Let&apos;s build something locals can&apos;t scroll past.
-            </p>
-            <span className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
-              <span>Start a project →</span>
-            </span>
-          </a>
-        </div>
+      </div>
+      <div className="works2-grid">
+        {works.map((w, i) => (
+          <WorkCard key={w.slug} w={w} i={i} />
+        ))}
       </div>
     </section>
   );
 }
 
-function GalItem({ w, i, total }: { w: (typeof works)[number]; i: number; total: number }) {
+function WorkCard({ w, i }: { w: (typeof works)[number]; i: number }) {
   const go = useStinger();
   const href = `/work/${w.slug}`;
+  const [imgOk, setImgOk] = useState(true);
+  const reveal = useReveal<HTMLDivElement>({ y: 42 });
+  const parts = w.tag.split("·").map((s) => s.trim());
+  const deliverable = parts[0] || "Website";
+  const benefit = parts[1] || w.stat.label;
   return (
     <div
-      className="gal-item"
+      ref={reveal}
+      className="work-card"
       data-hover
       role="link"
       tabIndex={0}
@@ -883,43 +899,43 @@ function GalItem({ w, i, total }: { w: (typeof works)[number]; i: number; total:
         }
       }}
     >
-      <div className="gal-img" style={{ backgroundImage: `url('${w.image}')` }} />
-      <div className="gal-meta">
-        <span className="gal-no">
-          {String(i + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-        </span>
-        <span className="gal-name">
-          {w.name} <ArrowUpRight size={20} />
-        </span>
-        <span className="gal-tag">{w.tag}</span>
-        {w.liveUrl && (
-          <a
-            className="gal-live"
-            href={w.liveUrl}
-            target="_blank"
-            rel="noreferrer"
-            data-hover
-            onClick={(e) => e.stopPropagation()}
-          >
-            View website <ArrowUpRight size={13} />
-          </a>
+      <div className="work-card-media">
+        {imgOk ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="work-card-img" src={w.image} alt="" onError={() => setImgOk(false)} />
+        ) : (
+          <div className="work-card-ph">
+            <Plus size={24} />
+            <Todo>Add a project image</Todo>
+          </div>
         )}
       </div>
-    </div>
-  );
-}
-
-// Empty slots in the gallery for upcoming work — drop a real screenshot into
-// /public/work and wire it into works.ts to turn one of these into a live panel.
-const GALLERY_PLACEHOLDERS = ["Your project here", "Next build", "Coming soon"];
-
-function GalPlaceholder({ label }: { label: string }) {
-  return (
-    <div className="gal-item gal-item--empty" aria-hidden>
-      <div className="gal-ph">
-        <Plus size={26} />
-        <span className="gal-ph-label">{label}</span>
-        <Todo>Add a project image</Todo>
+      <div className="work-card-foot">
+        <div className="work-card-head">
+          <span className="work-card-title">
+            <ProjectSymbol className="work-card-sym" size={18} /> {w.name}
+          </span>
+          {w.liveUrl && (
+            <a
+              className="work-card-visit"
+              href={w.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              data-hover
+              onClick={(e) => e.stopPropagation()}
+            >
+              View site
+            </a>
+          )}
+        </div>
+        <div className="work-card-tags">
+          <span>
+            {benefit} <span className="slash">/</span>
+          </span>
+          <span>
+            {deliverable} <span className="slash">/</span>
+          </span>
+        </div>
       </div>
     </div>
   );

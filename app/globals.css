@@ -1877,7 +1877,170 @@ body.cursor-ready * {
 }
 
 /* ================================================================
-   HORIZONTAL WORK RAIL
+   SELECTED WORKS — staggered two-column grid
+   ================================================================ */
+.works2 {
+  position: relative;
+}
+.works2-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: clamp(2.5rem, 6vw, 6rem);
+}
+.works2-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  font-size: clamp(2.6rem, 9vw, 7rem);
+}
+.works2-cue {
+  color: var(--text-muted);
+}
+.works2-cue .slash {
+  color: var(--accent);
+}
+.works2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem) clamp(2rem, 5vw, 6rem);
+  align-items: start;
+}
+/* the staggered look — push the right column down */
+.work-card:nth-child(even) {
+  margin-top: clamp(60px, 13vw, 200px);
+}
+.work-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 1.6vw, 1.4rem);
+}
+.work-card-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--elevated);
+}
+.work-card:nth-child(odd) .work-card-media {
+  aspect-ratio: 4 / 5;
+}
+.work-card:nth-child(even) .work-card-media {
+  aspect-ratio: 1 / 1;
+}
+.work-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.04);
+  transition: transform 0.7s var(--ease-out), filter 0.6s var(--ease-out);
+}
+.work-card:hover .work-card-img,
+.work-card:focus-visible .work-card-img {
+  transform: scale(1.04);
+  filter: grayscale(0) contrast(1.05);
+}
+.work-card-ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-muted);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--elevated),
+    var(--elevated) 12px,
+    var(--surface) 12px,
+    var(--surface) 24px
+  );
+}
+.work-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.work-card-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-size: clamp(1.15rem, 2.2vw, 1.9rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.work-card-sym {
+  flex: none;
+  color: var(--text);
+  transition: color 0.35s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.work-card:hover .work-card-sym {
+  color: var(--accent);
+  transform: rotate(90deg);
+}
+.work-card-visit {
+  display: none; /* desktop: open via the card; mobile shows the button */
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+.work-card-visit:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+.work-card-tags {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+.work-card-tags .slash {
+  color: var(--accent);
+}
+@media (max-width: 820px) {
+  .works2-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(2.5rem, 9vw, 4rem);
+  }
+  .work-card:nth-child(even) {
+    margin-top: 0; /* no stagger on mobile */
+  }
+  .work-card:nth-child(odd) .work-card-media,
+  .work-card:nth-child(even) .work-card-media {
+    aspect-ratio: 4 / 5;
+  }
+  .work-card-visit {
+    display: inline-flex; /* show VIEW SITE on mobile (image 5) */
+  }
+  .work-card-title {
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
+  }
+}
+
+/* ================================================================
+   HORIZONTAL WORK RAIL (legacy — unused; kept harmless)
    ================================================================ */
 .work-rail {
   position: relative;
@@ -4075,12 +4238,16 @@ div.todo {
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr; /* photo and text equally proportioned */
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+  align-items: stretch;
+}
+.about-copy {
+  display: flex;
+  flex-direction: column;
 }
 .about-photo {
   aspect-ratio: 4 / 5;
-  border-radius: 12px;
+  border-radius: 18px;
   overflow: hidden;
   border: 1px solid var(--border);
 }
@@ -4093,18 +4260,20 @@ div.todo {
   filter: grayscale(1) contrast(1.02); /* keep it on-brand B&W even if a colour file is used */
   will-change: transform;
 }
-.about-h {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(2.2rem, 4.6vw, 4rem);
+/* "hey there, I'm Aakif!" — Neue Montreal, bold (Book is the only weight that
+   ships, so 700 is a synthetic bold; it reads heavy at this size) */
+.about-h2 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
   line-height: 1;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+  letter-spacing: -0.03em;
   margin-bottom: clamp(1.3rem, 2.6vw, 2.2rem);
 }
 .about-sub p {
-  font-size: clamp(1.15rem, 1.9vw, 1.65rem);
-  line-height: 1.45;
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  line-height: 1.5;
   margin-bottom: 1.1rem;
 }
 .about-sub p:last-child {
@@ -4112,6 +4281,47 @@ div.todo {
 }
 .about-sub .hl-word {
   color: var(--text);
+}
+
+/* founder metrics — big Monument count-up + gray Monument label */
+.about-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.6rem, 4vw, 3.6rem);
+  margin-top: auto; /* pin to the bottom, level with the photo */
+  padding-top: clamp(2rem, 5vh, 3.5rem);
+}
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.metric-top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.metric-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2.1rem, 3.6vw, 3.2rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.metric-unit {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(0.85rem, 1.3vw, 1.1rem);
+  color: var(--text);
+}
+.metric-label {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(0.72rem, 1vw, 0.95rem);
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* ================================================================
@@ -4144,8 +4354,21 @@ div.todo {
   .about-grid {
     grid-template-columns: 1fr;
   }
+  .about-grid {
+    gap: clamp(1.5rem, 6vw, 2.2rem);
+  }
+  /* image  +  (heading + subtexts)  +  metrics — each as its own block */
   .about-photo {
-    max-width: 280px;
+    aspect-ratio: 3 / 4;
+  }
+  .about-metrics {
+    flex-direction: column;
+    gap: clamp(1.4rem, 5vw, 2rem);
+    margin-top: clamp(1.6rem, 6vw, 2.4rem);
+    padding-top: 0;
+  }
+  .metric-num {
+    font-size: clamp(2.4rem, 12vw, 3.4rem);
   }
   .testi-grid {
     grid-template-columns: 1fr;
