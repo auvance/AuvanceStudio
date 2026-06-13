@@ -56,7 +56,7 @@ export default function Page() {
 
 /* --- HERO --- */
 const HERO_COPY =
-  "Custom sites for local businesses that turn “just looking” into booked work. You own all of it — one flat price, no lock-in, no surprises.";
+  "Custom sites for local businesses that turn “just looking” into booked work. You own all of it - one flat price, no lock-in, no surprises.";
 
 function HeroCtas({ center }: { center?: boolean }) {
   return (
@@ -145,15 +145,25 @@ function Hero() {
       <Plus className="hero-mark" style={{ top: "15vh", right: "4%" }} size={18} />
       <Plus className="hero-mark" style={{ bottom: "8vh", left: "3%" }} size={16} />
 
-      <div className="hero-headline-row">
-        <h1 className="hero-headline">
-          <span className="line">We build sites</span>
-          <span className="line">that work as</span>
-          <span className="line">
-            hard as you do<span className="accent">.</span>
-          </span>
-        </h1>
-        <div className="hero-asides">
+      {/* Desktop: left = headline + cards 1–2; right = one grouped column
+          (services → CTAs → copy → image → locale) for easy gap tuning */}
+      <div className="hero-grid">
+        <div className="hero-left">
+          <h1 className="hero-headline">
+            <span className="line">We build sites</span>
+            <span className="line">that work as</span>
+            <span className="line">
+              hard as you do<span className="accent">.</span>
+            </span>
+          </h1>
+          <div className="hero-left-cards">
+            <HeroCard w={works[0]} cls="c1" />
+            <HeroCard w={works[1]} cls="c2" />
+          </div>
+        </div>
+
+        <div className="hero-right">
+          {/* Group 1 — services */}
           <div className="hero-aside">
             Websites <span className="slash">/</span>
             <br />
@@ -161,23 +171,21 @@ function Hero() {
             <br />
             Local SEO - Strategy <span className="slash">/</span>
           </div>
-          <div className="hero-aside hero-aside--meta">
-            Based in Vancouver <span className="slash">/</span>
-            <br />
-            Est @2023
-          </div>
-        </div>
-      </div>
 
-      {/* Desktop: three off-size project cards + CTAs/copy column */}
-      <div className="hero-cards">
-        <HeroCard w={works[0]} cls="c1" />
-        <HeroCard w={works[1]} cls="c2" />
-        <div className="hero-right-col">
-          <HeroCard w={works[2]} cls="c3" />
-          <div className="hero-cta-block">
-            <HeroCtas />
-            <p className="hero-copy">{HERO_COPY}</p>
+          {/* Group A = Group 2 (buttons + subtext + image) + Group 3 (locale) */}
+          <div className="hero-right-main">
+            {/* Group 2 */}
+            <div className="hero-pitch">
+              <HeroCtas />
+              <p className="hero-copy">{HERO_COPY}</p>
+              <HeroCard w={works[2]} cls="c3" />
+            </div>
+            {/* Group 3 */}
+            <div className="hero-aside hero-aside--meta">
+              Based in Vancouver <span className="slash">/</span>
+              <br />
+              Est @2023
+            </div>
           </div>
         </div>
       </div>

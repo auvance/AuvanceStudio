@@ -604,22 +604,68 @@ html.lenis body {
   flex-direction: column;
   justify-content: center;
   gap: clamp(1.2rem, 3vh, 2.6rem);
-  padding: clamp(84px, 10vh, 116px) var(--margin) clamp(20px, 3vh, 40px);
+  padding: clamp(124px, 15vh, 184px) var(--margin) clamp(20px, 3vh, 40px);
   position: relative;
   max-width: var(--maxw);
   margin: 0 auto;
   overflow: hidden;
 }
 
-/* headline (Monument Extended regular, sentence case) + right asides */
-.hero-headline-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+/* desktop hero: left column (headline + cards 1–2) | right column (one
+   grouped flex stack: services → CTAs → copy → image → locale). Tweak the
+   single .hero-right gap to space the whole right side. */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 871fr) minmax(0, 440fr);
+  gap: clamp(14px, 1.8vw, 30px);
+  align-items: stretch;
+  width: 100%;
   position: relative;
   z-index: 2;
 }
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.2rem, 3vh, 2.4rem);
+  min-width: 0;
+}
+.hero-left-cards {
+  display: grid;
+  grid-template-columns: 489fr 382fr;
+  gap: clamp(12px, 1.5vw, 26px);
+  align-items: start;
+}
+/* Nested grouping (so each gap is tweakable on its own line):
+   .hero-right  = Group 1 (services)  +  .hero-right-main
+   .hero-right-main (Group A) = .hero-pitch (Group 2)  +  locale (Group 3)
+   .hero-pitch  (Group 2) = buttons + subtext + image                       */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 20vh, 5rem); /* GAP 1: services ↔ rest */
+  text-align: right;
+  min-width: 0;
+}
+.hero-right-main {
+  flex: 1; /* fill the column so the locale can sit at the bottom */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 2vh, 1.6rem); /* GAP 2: image-group ↔ locale (min) */
+}
+.hero-pitch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(0.9rem, 1.8vh, 1.4rem); /* GAP 3: buttons ↔ subtext ↔ image */
+}
+.hero-pitch .hcard.c3 {
+  align-self: stretch; /* keep the image full column width */
+}
+.hero-right-main .hero-aside--meta {
+  margin-top: auto; /* pin the locale to the bottom of Group A */
+}
+
 .hero-headline {
   font-family: var(--font-display);
   font-weight: 400;
@@ -636,29 +682,7 @@ html.lenis body {
 .hero-headline .accent {
   color: var(--accent);
 }
-.hero-asides {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* services pinned top, locale pushed down */
-  align-self: stretch; /* match the headline's height so it spreads */
-  gap: clamp(1.4rem, 4vh, 3rem);
-  text-align: right;
-  flex: none;
-  padding-top: 0.4rem;
-}
-
-/* three off-size project cards (top-aligned, widths in design proportions).
-   Fill the full content width — left edge of the headline to the right edge
-   of the tags. Square corners (intentional, breaks the rounded-template look). */
-.hero-cards {
-  display: grid;
-  grid-template-columns: 489fr 382fr 440fr;
-  align-items: start;
-  gap: clamp(12px, 1.5vw, 26px);
-  width: 100%;
-  position: relative;
-  z-index: 2;
-}
+/* square-cornered project cards (intentional, breaks the rounded template) */
 .hcard {
   position: relative;
   min-width: 0;
@@ -672,14 +696,6 @@ html.lenis body {
 }
 .hcard.c2 {
   aspect-ratio: 382 / 456;
-}
-.hero-right-col {
-  min-width: 0;
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: clamp(1rem, 2vw, 2rem);
 }
 .hcard.c3 {
   width: 100%;
@@ -779,7 +795,7 @@ html.lenis body {
   font-size: clamp(0.9rem, 1vw, 1rem);
   letter-spacing: 0;
   text-transform: none;
-  padding: 12px 22px;
+  padding: 12px 37px;
   border-radius: 100px;
   border: 1px solid var(--text);
   white-space: nowrap;
@@ -800,7 +816,6 @@ html.lenis body {
 .h-cta--ghost {
   background: transparent;
   color: var(--text);
-  border-color: var(--border);
 }
 .h-cta--ghost:hover {
   background: var(--text);
@@ -809,11 +824,11 @@ html.lenis body {
 }
 .hero-copy {
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: white;
   text-align: right;
-  max-width: 46ch;
+  max-width: 35ch;
 }
 
 /* mobile block (copy → autoplay slider → centered CTAs) — hidden on desktop */
@@ -905,10 +920,15 @@ html.lenis body {
     gap: clamp(1.4rem, 4vh, 2.2rem);
     padding-top: clamp(96px, 16vh, 130px);
   }
-  .hero-headline-row {
+  .hero-grid {
+    display: flex;
     flex-direction: column;
   }
-  .hero-asides {
+  /* mobile keeps only the headline from the grid; cards + right group hide */
+  .hero-left-cards {
+    display: none;
+  }
+  .hero-right {
     display: none;
   }
   .hero-headline {
@@ -918,9 +938,6 @@ html.lenis body {
   /* keep the authored 3/3/4-word lines on one line each (font is very wide) */
   .hero-headline .line {
     white-space: nowrap;
-  }
-  .hero-cards {
-    display: none;
   }
   .hero-mobile {
     display: flex;
@@ -1402,7 +1419,7 @@ body.cursor-ready * {
   width: 56px;
   height: 42px;
   padding: 0;
-  border: 1px solid var(--border);
+  border: 1px solid white;
   border-radius: 13px;
   background: color-mix(in srgb, var(--bg) 55%, transparent);
   backdrop-filter: blur(10px) saturate(130%);
@@ -1587,8 +1604,8 @@ body.cursor-ready * {
 /* only the locale line stays in JetBrains Mono — and in full white */
 .hero-aside--meta {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
+  font-size: 1rem;
+  letter-spacing: 0em;
   text-transform: uppercase;
   line-height: 1.7;
   color: var(--text);

@@ -40,7 +40,7 @@ export default function Preloader() {
 
     const revealInstant = () => {
       gsap.set(".hero-headline .line", { autoAlpha: 1, y: 0 });
-      gsap.set([".hero-asides", ".hero-cards", ".hero-mobile"], { autoAlpha: 1, y: 0 });
+      gsap.set([".hero-left-cards", ".hero-right", ".hero-mobile"], { autoAlpha: 1, y: 0 });
     };
 
     const safetyId = window.setTimeout(finish, reduce ? 400 : 7000);
@@ -69,7 +69,7 @@ export default function Preloader() {
 
       // pre-hide hero (under the curtain → no flash)
       tl.set(".hero-headline .line", { autoAlpha: 0, y: 44 }, 0);
-      tl.set([".hero-asides", ".hero-cards", ".hero-mobile"], { autoAlpha: 0, y: 28 }, 0);
+      tl.set([".hero-left-cards", ".hero-right", ".hero-mobile"], { autoAlpha: 0, y: 28 }, 0);
 
       // crown — fade/scale in, then a slow 3D swivel
       tl.fromTo(
@@ -110,7 +110,7 @@ export default function Preloader() {
           "<0.32"
         )
         .to(
-          [".hero-asides", ".hero-cards", ".hero-mobile"],
+          [".hero-left-cards", ".hero-right", ".hero-mobile"],
           { autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.12 },
           "<0.15"
         );
