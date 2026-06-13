@@ -39,8 +39,8 @@ export default function Preloader() {
     const stopId = window.setTimeout(() => window.__lenis?.stop(), 0);
 
     const revealInstant = () => {
-      gsap.set(".hero-headline .line-inner", { yPercent: 0 });
-      gsap.set([".hero-eyebrow", ".hero-foot"], { autoAlpha: 1, y: 0 });
+      gsap.set(".hero-headline .line", { autoAlpha: 1, y: 0 });
+      gsap.set([".hero-asides", ".hero-cards", ".hero-mobile"], { autoAlpha: 1, y: 0 });
     };
 
     const safetyId = window.setTimeout(finish, reduce ? 400 : 7000);
@@ -68,8 +68,8 @@ export default function Preloader() {
       const tl = gsap.timeline({ onComplete: finish });
 
       // pre-hide hero (under the curtain → no flash)
-      tl.set(".hero-headline .line-inner", { yPercent: 110 }, 0);
-      tl.set([".hero-eyebrow", ".hero-foot"], { autoAlpha: 0, y: 28 }, 0);
+      tl.set(".hero-headline .line", { autoAlpha: 0, y: 44 }, 0);
+      tl.set([".hero-asides", ".hero-cards", ".hero-mobile"], { autoAlpha: 0, y: 28 }, 0);
 
       // crown — fade/scale in, then a slow 3D swivel
       tl.fromTo(
@@ -105,12 +105,12 @@ export default function Preloader() {
         .to(".preloader-counter", { autoAlpha: 0, y: -24, duration: 0.5, ease: "power2.in" }, "<")
         .to(overlayRef.current, { yPercent: -100, duration: 1.05, ease: "expo.inOut" }, "<0.05")
         .to(
-          ".hero-headline .line-inner",
-          { yPercent: 0, duration: 1.15, ease: "power4.out", stagger: 0.09 },
+          ".hero-headline .line",
+          { autoAlpha: 1, y: 0, duration: 1.05, ease: "power4.out", stagger: 0.09 },
           "<0.32"
         )
         .to(
-          [".hero-eyebrow", ".hero-foot"],
+          [".hero-asides", ".hero-cards", ".hero-mobile"],
           { autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.12 },
           "<0.15"
         );

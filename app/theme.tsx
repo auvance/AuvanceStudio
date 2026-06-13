@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { prefersReducedMotion, setMotionPreference, MOTION_KEY } from "./motion";
 
 const STORAGE_KEY = "auvance-theme";
-const HINT_KEY = "auvance:crown-hint-seen";
+const HINT_KEY = "auvance:crown-hint-seen-v2";
 
 export function toggleTheme() {
   const html = document.documentElement;
@@ -40,7 +40,8 @@ export function CrownToggle() {
       /* ignore */
     }
     if (seen) return;
-    const t = window.setTimeout(() => setShowHint(true), 1400);
+    // hold off until the intro settles + the user has had time to read
+    const t = window.setTimeout(() => setShowHint(true), 5000);
     return () => window.clearTimeout(t);
   }, []);
 
@@ -116,7 +117,7 @@ export function MotionToggle() {
   );
 }
 
-const MOTION_HINT_KEY = "auvance:motion-hint-seen";
+const MOTION_HINT_KEY = "auvance:motion-hint-seen-v2";
 
 /**
  * First-visit toast (mirrors the crown hint) telling the visitor they can calm
@@ -133,7 +134,8 @@ export function MotionHint() {
     } catch {
       /* ignore */
     }
-    const t = window.setTimeout(() => setShow(true), 4200);
+    // appears after the crown hint so the two don't land at once
+    const t = window.setTimeout(() => setShow(true), 9000);
     return () => window.clearTimeout(t);
   }, []);
 

@@ -17,7 +17,6 @@ import { CalButton } from "./Cal";
 import {
   Plus,
   Asterisk,
-  Globe,
   ArrowUpRight,
   Dot,
   Compass,
@@ -56,159 +55,141 @@ export default function Page() {
 }
 
 /* --- HERO --- */
-function Hero() {
+const HERO_COPY =
+  "Custom sites for local businesses that turn “just looking” into booked work. You own all of it — one flat price, no lock-in, no surprises.";
+
+function HeroCtas({ center }: { center?: boolean }) {
   return (
-    <section id="top" className="hero">
-      <HeroImageTrail />
-      <Plus className="hero-mark" style={{ top: "16vh", right: "4%" }} size={20} />
-      <Plus className="hero-mark" style={{ bottom: "22vh", left: "3%" }} size={20} />
-      <Plus className="hero-mark" style={{ bottom: "10vh", right: "6%" }} size={16} />
-
-      <div className="hero-top hero-eyebrow">
-        <div className="hero-aside">
-          Websites <span className="slash">/</span>
-          <br />
-          Redesigns — UI/UX <span className="slash">/</span>
-          <br />
-          Local SEO — Strategy <span className="slash">/</span>
-        </div>
-        <div className="hero-aside" style={{ textAlign: "right" }}>
-          <span style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
-            <Globe size={14} /> Based in Vancouver
-          </span>
-          <br />
-          On the Pacific coast — Est. 2023
-        </div>
-      </div>
-
-      <h1 className="display bleed-right hero-headline" style={{ margin: "2.5rem 0" }}>
-        <span className="line">
-          <span className="line-inner">We build sites</span>
-        </span>
-        <span className="line">
-          <span className="line-inner">that work as</span>
-        </span>
-        <span className="line">
-          <span className="line-inner">
-            hard as you do<span className="accent">.</span>
-          </span>
-        </span>
-      </h1>
-
-      <div className="hero-foot">
-        <p className="body-lg" style={{ maxWidth: "460px" }}>
-          Custom sites for local businesses that turn &ldquo;just looking&rdquo; into booked work.
-          You own all of it — one flat price, no lock-in, no surprises.
-        </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem", alignItems: "flex-start" }}>
-          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <a href="#contact" className="btn btn-primary" data-hover>
-              <span>Book a free call →</span>
-            </a>
-            <a href="#work" className="btn btn-ghost" data-hover>
-              <span>See the work</span>
-            </a>
-          </div>
-          <div className="scroll-cue">
-            <span className="dot" /> Scroll to explore
-          </div>
-        </div>
-      </div>
-    </section>
+    <div className={`hero-ctas${center ? " hero-ctas--center" : ""}`}>
+      <a href="#contact" className="h-cta h-cta--solid" data-hover>
+        Book a free call
+      </a>
+      <a href="#work" className="h-cta h-cta--ghost" data-hover>
+        See the work <ArrowUpRight size={14} />
+      </a>
+    </div>
   );
 }
 
-/* --- HERO IMAGE TRAIL (desktop only) --- */
-function HeroImageTrail() {
-  const ref = useRef<HTMLDivElement>(null);
+function HeroCard({ w, cls }: { w: (typeof works)[number]; cls: string }) {
+  const go = useStinger();
+  const href = `/work/${w.slug}`;
+  const [imgOk, setImgOk] = useState(true);
+  return (
+    <div
+      className={`hcard ${cls}`}
+      data-hover
+      role="link"
+      tabIndex={0}
+      aria-label={`View ${w.name} case study`}
+      onClick={() => go(href)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          go(href);
+        }
+      }}
+    >
+      {imgOk ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="hcard-img" src={w.image} alt="" onError={() => setImgOk(false)} />
+      ) : (
+        <div className="hcard-ph">
+          <Plus size={22} />
+          <span className="hcard-ph-name">{w.name}</span>
+          <Todo>Add a project image</Todo>
+        </div>
+      )}
+      <span className="hcard-label">
+        {w.name} <ArrowUpRight size={14} />
+      </span>
+    </div>
+  );
+}
+
+// Mobile-only autoplay slider showcasing the projects (372×246-ish frame).
+function HeroSlider() {
+  const slides = works;
+  const [idx, setIdx] = useState(0);
   useEffect(() => {
-    const layer = ref.current;
-    const hero = layer?.closest(".hero") as HTMLElement | null;
-    if (!layer || !hero) return;
-    const ok = window.matchMedia(
-      "(hover: hover) and (pointer: fine) and (min-width: 1024px)"
-    ).matches;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!ok || reduce) return;
+    if (prefersReducedMotion()) return;
+    const id = window.setInterval(() => setIdx((i) => (i + 1) % slides.length), 3200);
+    return () => window.clearInterval(id);
+  }, [slides.length]);
+  return (
+    <div className="hero-slider">
+      <div className="hero-slider-track" style={{ transform: `translateX(-${idx * 100}%)` }}>
+        {slides.map((w) => (
+          <div key={w.slug} className="hero-slide" style={{ backgroundImage: `url('${w.image}')` }}>
+            <span className="hero-slide-label">{w.name}</span>
+          </div>
+        ))}
+      </div>
+      <div className="hero-slider-dots" aria-hidden>
+        {slides.map((w, i) => (
+          <button
+            key={w.slug}
+            className={`hsd${i === idx ? " on" : ""}`}
+            aria-label={`Show ${w.name}`}
+            onClick={() => setIdx(i)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-    const pool = [
-      works[0].image,
-      works[1].image,
-      gradientPreview(0, "Web"),
-      gradientPreview(1, "Design"),
-      gradientPreview(2, "SEO"),
-      gradientPreview(3, "Brand"),
-    ];
-    let i = 0;
-    let lastT = 0;
-    let lastX = 0;
-    let lastY = 0;
+function Hero() {
+  return (
+    <section id="top" className="hero">
+      <Plus className="hero-mark" style={{ top: "15vh", right: "4%" }} size={18} />
+      <Plus className="hero-mark" style={{ bottom: "8vh", left: "3%" }} size={16} />
 
-    const onMove = (e: MouseEvent) => {
-      // Don't spawn images over the CTAs / scroll cue.
-      const t = e.target as HTMLElement | null;
-      if (t && t.closest(".hero-foot, a, button")) return;
-      const now = performance.now();
-      const dist = Math.hypot(e.clientX - lastX, e.clientY - lastY);
-      // Less frequent than before (bigger time + distance gates).
-      if (now - lastT < 170 || dist < 120) return;
-      lastT = now;
-      lastX = e.clientX;
-      lastY = e.clientY;
+      <div className="hero-headline-row">
+        <h1 className="hero-headline">
+          <span className="line">We build sites</span>
+          <span className="line">that work as</span>
+          <span className="line">
+            hard as you do<span className="accent">.</span>
+          </span>
+        </h1>
+        <div className="hero-asides">
+          <div className="hero-aside">
+            Websites <span className="slash">/</span>
+            <br />
+            Redesigns - UI/UX <span className="slash">/</span>
+            <br />
+            Local SEO - Strategy <span className="slash">/</span>
+          </div>
+          <div className="hero-aside hero-aside--meta">
+            Based in Vancouver <span className="slash">/</span>
+            <br />
+            Est @2023
+          </div>
+        </div>
+      </div>
 
-      const rect = hero.getBoundingClientRect();
-      const img = document.createElement("img");
-      img.src = pool[i % pool.length];
-      img.alt = "";
-      img.className = "hero-trail-img";
-      img.style.left = `${e.clientX - rect.left}px`;
-      img.style.top = `${e.clientY - rect.top}px`;
-      layer.appendChild(img);
-      i++;
+      {/* Desktop: three off-size project cards + CTAs/copy column */}
+      <div className="hero-cards">
+        <HeroCard w={works[0]} cls="c1" />
+        <HeroCard w={works[1]} cls="c2" />
+        <div className="hero-right-col">
+          <HeroCard w={works[2]} cls="c3" />
+          <div className="hero-cta-block">
+            <HeroCtas />
+            <p className="hero-copy">{HERO_COPY}</p>
+          </div>
+        </div>
+      </div>
 
-      gsap.fromTo(
-        img,
-        { autoAlpha: 0, scale: 0.6, rotate: Math.random() * 18 - 9 },
-        { autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" }
-      );
-      gsap.to(img, {
-        autoAlpha: 0,
-        scale: 0.92,
-        duration: 0.5,
-        delay: 0.45,
-        ease: "power2.in",
-        onComplete: () => img.remove(),
-      });
-    };
-
-    // Scroll-direction drift: down → the spray slides up/left, up → down/right.
-    const driftX = gsap.quickTo(layer, "x", { duration: 0.6, ease: "power2.out" });
-    const driftY = gsap.quickTo(layer, "y", { duration: 0.6, ease: "power2.out" });
-    let lastScroll = window.scrollY;
-    let resetT: number | undefined;
-    const onScroll = () => {
-      const y = window.scrollY;
-      const down = y > lastScroll;
-      lastScroll = y;
-      driftX(down ? -55 : 55);
-      driftY(down ? -40 : 40);
-      window.clearTimeout(resetT);
-      resetT = window.setTimeout(() => {
-        driftX(0);
-        driftY(0);
-      }, 220);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    hero.addEventListener("mousemove", onMove);
-    return () => {
-      hero.removeEventListener("mousemove", onMove);
-      window.removeEventListener("scroll", onScroll);
-      window.clearTimeout(resetT);
-      layer.querySelectorAll(".hero-trail-img").forEach((n) => n.remove());
-    };
-  }, []);
-  return <div ref={ref} className="hero-trail" aria-hidden />;
+      {/* Mobile: copy → autoplay slider → centered CTAs */}
+      <div className="hero-mobile">
+        <p className="hero-copy">{HERO_COPY}</p>
+        <HeroSlider />
+        <HeroCtas center />
+      </div>
+    </section>
+  );
 }
 
 /* --- MARQUEE --- */
@@ -303,7 +284,7 @@ function About() {
             <img
               ref={photo}
               className="about-photo-img"
-              src="/PortraitOne.jpeg"
+              src="/PortraitThree.jpeg"
               alt="Aakif — founder of Auvance"
               onError={() => setPhotoOk(false)}
             />
